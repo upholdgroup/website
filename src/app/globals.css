@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens. The whole palette hangs off --brand — change that one value
+   (and its two tints) to re-skin the page.
+   --------------------------------------------------------------------------- */
+:root {
+  --background: #ffffff;
+  --foreground: #16191c;
+  --muted: #6b7280;
+
+  --brand: #1c8f4b;        /* solid fills: roof, drum, canopies, progress */
+  --brand-line: #35a862;   /* line-art strokes */
+  --brand-soft: #e6f2e9;   /* progress track, ground haze */
+
+  --rule: #dfe3e0;         /* horizon line */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-line: var(--brand-line);
+  --color-brand-soft: var(--brand-soft);
+  --color-rule: var(--rule);
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-instrument-serif);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0b0d0c;
+    --foreground: #edf0ee;
+    --muted: #8e968f;
+
+    --brand: #3fbc72;
+    --brand-line: #4fcb82;
+    --brand-soft: #16241c;
+
+    --rule: #232a26;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* --- Motion ---------------------------------------------------------------
+   Each pan track holds 3 identical tiles, so shifting the track by exactly
+   -33.3333% equals one tile width at any scale. That keeps the loop seamless
+   without hard-coding pixel widths.
+   -------------------------------------------------------------------------- */
+@keyframes pan {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-33.3333%, 0, 0); }
+}
+
+@keyframes fill {
+  0%   { width: 4%; }
+  70%  { width: 63%; }
+  100% { width: 68%; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.62; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pan      { animation: pan 72s linear infinite; will-change: transform; }
+.animate-pan-far  { animation: pan 150s linear infinite; will-change: transform; }
+.animate-rise     { animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* One declaration, two animations: the bar eases up to its resting value and
+   only then starts breathing. Two separate classes would clobber each other. */
+.animate-progress {
+  animation:
+    fill 14s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    breathe 3s ease-in-out 14s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pan,
+  .animate-pan-far,
+  .animate-progress,
+  .animate-rise {
+    animation: none;
+  }
+  .animate-progress { width: 68%; }
+  .animate-rise { opacity: 1; transform: none; }
+}
