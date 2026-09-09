@@ -38,9 +38,21 @@ npx vercel --prod    # production
 Or import the repository at [vercel.com/new](https://vercel.com/new) — the
 framework preset, build command and output directory are all detected.
 
-Set `NEXT_PUBLIC_SITE_URL` to the production origin (see `.env.example`) so
-`robots.txt`, `sitemap.xml` and the Open Graph tags emit absolute URLs. Without
-it the app falls back to the value in `src/lib/site.ts`.
+### Canonical URL
+
+`robots.txt`, `sitemap.xml` and the Open Graph tags need an absolute origin.
+`resolveSiteUrl` in `src/lib/site.ts` takes the first usable value from:
+
+1. `NEXT_PUBLIC_SITE_URL` — set this to the production origin (see `.env.example`)
+2. `VERCEL_PROJECT_PRODUCTION_URL` — supplied by Vercel, the stable domain
+3. `VERCEL_URL` — supplied by Vercel, the per-deployment URL, so previews are correct
+4. the hard-coded fallback in `src/lib/site.ts`
+
+Blank values are skipped rather than used. A variable declared in the Vercel
+dashboard with no value arrives as `""`, not `undefined`, so `??` is not enough
+to guard this — that mistake fails the build with `TypeError: Invalid URL`.
+Bare hostnames get an `https://` prefix, since Vercel supplies its domains
+without a scheme.
 
 ## Customising
 
