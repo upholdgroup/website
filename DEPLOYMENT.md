@@ -83,6 +83,8 @@ to your machine, which is the quickest way to check the two match.
 | `EMAIL_FROM` | Production | Must be an address on a **verified** Resend domain, e.g. `Uphold Group <admin@upholdgroup.com.au>`. |
 | `ADMIN_EMAILS` | Once | The address allowed to claim the first hire desk account. Only usable while no accounts exist. |
 | `ADMIN_SESSION_SECRET` | Production | `openssl rand -hex 32`. Signs the admin session cookie. **The admin refuses to serve without it in production** rather than defaulting to something guessable. |
+| `TELEGRAM_BOT_TOKEN` | Optional | From @BotFather in Telegram. Alerts the desk the moment an enquiry lands. See §4. |
+| `TELEGRAM_CHAT_ID` | Optional | The chat or group to alert. `npm run telegram:check` finds it for you. |
 
 `ALLOW_LOCAL_STORE=1` exists to force the JSON store on a managed host. It is
 for debugging only, and it will lose data. Do not set it in production.
@@ -152,6 +154,35 @@ Until the domain is verified, Resend will only deliver to the address that owns
 the account, and real enquiries will reach nobody.
 
 ---
+
+### Telegram alerts
+
+Email is the record the desk works from. Telegram is the thing that gets
+someone to the phone: a builder ringing at 5:50am is comparing you against
+whoever answers first, and an email in a shared inbox does not win that.
+
+Free at any volume, unlike SMS, and a group chat means the whole desk sees the
+same alert rather than one person being a single point of failure.
+
+1. In Telegram, message **@BotFather** → `/newbot` → name it → it returns a
+   token. Put that in `TELEGRAM_BOT_TOKEN`.
+2. Create a group for the desk and add the bot to it, then send any message in
+   it. (A direct chat with the bot works too, if it is only ever you.)
+3. Find the chat id:
+
+   ```bash
+   npm run telegram:check
+   ```
+
+   With the token set and the chat id not, it lists every chat the bot can see
+   and their ids. Put the right one in `TELEGRAM_CHAT_ID`.
+4. Run it again with both set and it sends a real alert, formatted exactly as
+   an enquiry will be.
+5. Set both in Vercel and redeploy.
+
+Unset, this no-ops: the site runs identically and the enquiry still saves and
+emails. The two channels are settled independently, so neither can delay or
+suppress the other, and neither can hold up the visitor waiting on the form.
 
 ## 5. Deploying
 

@@ -3,6 +3,7 @@ import { trades } from "@/lib/content/trades";
 import { saveEnquiry } from "@/lib/db/enquiries";
 import type { EnquiryKind, StoredEnquiry } from "@/lib/db/types";
 import { sendEmail } from "@/lib/email";
+import { esc, sendTelegram } from "@/lib/telegram";
 import { site } from "@/lib/site";
 
 export type Enquiry = {
@@ -43,11 +44,55 @@ export async function deliverEnquiry(enquiry: Enquiry): Promise<void> {
     console.error("[uphold] ENQUIRY NOT SAVED", JSON.stringify(record), error);
   }
 
-  try {
-    await notifyDesk(record);
-  } catch (error) {
-    console.error("[uphold] enquiry saved but not emailed", record.reference, error);
+  /*
+    Two channels, settled independently. Email is the record the desk works
+    from; Telegram is the alert that gets someone to the phone. If one
+    provider is having a morning the other still goes, and neither can hold
+    up the visitor waiting on the form behind this.
+  */
+  const [emailed, pinged] = await Promise.allSettled([
+    notifyDesk(record),
+    pingTelegram(record),
+  ]);
+
+  if (emailed.status === "rejected") {
+    console.error("[uphold] enquiry saved but not emailed", record.reference, emailed.reason);
   }
+  if (pinged.status === "rejected") {
+    console.error("[uphold] enquiry saved but no telegram alert", record.reference, pinged.reason);
+  }
+}
+
+/**
+ * The alert. Short enough to read on a lock screen, and front-loaded: what
+ * kind of job, where, and when it starts, before anything else. The mobile is
+ * on its own line because Telegram turns it into a tap-to-call link.
+ */
+async function pingTelegram(record: StoredEnquiry): Promise<void> {
+  const host = record.kind === "host-request";
+  const name = esc(String(record.fields.name ?? "Someone"));
+  const phone = esc(String(record.fields.phone ?? ""));
+  const suburb = esc(String(record.fields.suburb ?? record.fields.preferredRegion ?? ""));
+  const start = esc(readable("start", String(record.fields.start ?? "")));
+
+  const headline = host
+    ? `🔶 <b>Labour request</b>${suburb ? ` · ${suburb}` : ""}${start ? ` · ${start}` : ""}`
+    : `🔷 <b>Worker registration</b>${suburb ? ` · ${suburb}` : ""}`;
+
+  await sendTelegram(
+    [
+      headline,
+      "",
+      `<b>${name}</b>`,
+      phone,
+      "",
+      esc(summarise(record)),
+      "",
+      `<a href="${site.url}/admin/enquiries/${record.reference}">Open ${esc(record.reference)}</a>`,
+    ]
+      .filter((line) => line !== undefined && line !== "undefined")
+      .join("\n"),
+  );
 }
 
 const LABELS: Record<string, string> = {
