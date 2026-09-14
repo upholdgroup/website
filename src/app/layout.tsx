@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  /* What iOS prints under the home screen icon. Without it the <title> is
+     used, and ours is 71 characters long. */
+  appleWebApp: { title: "Uphold" },
   authors: [{ name: site.legalName }],
   openGraph: {
     type: "website",
