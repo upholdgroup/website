@@ -67,6 +67,10 @@ export default function ContactPage() {
                 </ul>
 
                 <h2 className="eyebrow mt-8 text-ink-45">Email</h2>
+                {/* One inbox today, so it is listed once: the same address twice
+                    under two labels reads as a mistake. site.ts keeps the two
+                    fields separate, so the moment hosts and workers get
+                    different addresses the split comes back on its own. */}
                 <ul className="mt-4 space-y-2 text-[16px]">
                   <li>
                     <a
@@ -74,26 +78,29 @@ export default function ContactPage() {
                       className="underline decoration-line-strong underline-offset-4 transition-colors duration-150 hover:text-accent hover:decoration-accent"
                     >
                       {site.hireEmail}
-                    </a>{" "}
-                    <span className="text-ink-45">for hosts</span>
+                    </a>
+                    {site.workEmail !== site.hireEmail && (
+                      <span className="text-ink-45"> for hosts</span>
+                    )}
                   </li>
-                  <li>
-                    <a
-                      href={`mailto:${site.workEmail}`}
-                      className="underline decoration-line-strong underline-offset-4 transition-colors duration-150 hover:text-accent hover:decoration-accent"
-                    >
-                      {site.workEmail}
-                    </a>{" "}
-                    <span className="text-ink-45">for workers</span>
-                  </li>
+                  {site.workEmail !== site.hireEmail && (
+                    <li>
+                      <a
+                        href={`mailto:${site.workEmail}`}
+                        className="underline decoration-line-strong underline-offset-4 transition-colors duration-150 hover:text-accent hover:decoration-accent"
+                      >
+                        {site.workEmail}
+                      </a>{" "}
+                      <span className="text-ink-45">for workers</span>
+                    </li>
+                  )}
                 </ul>
 
                 <h2 className="eyebrow mt-8 text-ink-45">Where we work</h2>
                 <p className="mt-4 text-[16px] leading-[1.7]">{site.serviceArea.short}</p>
                 <p className="mt-4 text-[15px] leading-[1.6] text-ink-70">
-                  We run mobile rather than from a shopfront, so there is no counter to walk
-                  up to. Interviews and ticket checks are arranged to suit you: in person, on
-                  site, or by video. Bring the physical ticket cards either way.
+                  Interviews and ticket checks are arranged to suit you: in person, on site,
+                  or by video. Bring the physical ticket cards either way.
                 </p>
                 {site.abn && (
                   <p className="eyebrow mt-6 border-t border-line pt-5 text-ink-45">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Arrow } from "@/components/ui/Arrow";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "outline" | "quiet" | "on-ink";
@@ -39,7 +40,7 @@ const variants: Record<Variant, string> = {
 type Props = {
   variant?: Variant;
   size?: Size;
-  /** Adds ↗ — reserve it for conversion actions. */
+  /** Adds the outbound arrow. Reserve it for conversion actions. */
   arrow?: boolean;
   href?: string;
   children: ReactNode;
@@ -59,11 +60,7 @@ export function Button({
   const content = (
     <>
       {children}
-      {arrow && (
-        <span aria-hidden="true" className="text-[0.8em] leading-none">
-          ↗
-        </span>
-      )}
+      {arrow && <Arrow direction="up-right" className="text-[0.85em]" />}
     </>
   );
 
@@ -109,7 +106,7 @@ export function ArrowCircle({
       style={{ width: size, height: size }}
       className={`arrow-nudge inline-flex shrink-0 items-center justify-center rounded-full transition-colors duration-150 ${tones[tone]}`}
     >
-      →
+      <Arrow direction="right" className="text-[0.62em]" />
     </span>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Arrow } from "@/components/ui/Arrow";
 import { Reveal } from "@/components/ui/Reveal";
 import type { Commitment } from "@/lib/content/commitments";
 
@@ -90,9 +91,7 @@ export function Commitments({ items }: { items: Commitment[] }) {
                 className="group inline-flex min-h-11 items-center gap-2 text-[14px] font-medium text-ink transition-colors duration-150 hover:text-accent"
               >
                 {item.linkLabel}
-                <span aria-hidden="true" className="arrow-nudge text-accent">
-                  &rarr;
-                </span>
+                <Arrow direction="right" className="arrow-nudge text-accent" />
               </Link>
             </div>
           </li>
@@ -103,13 +102,13 @@ export function Commitments({ items }: { items: Commitment[] }) {
         <CarouselButton
           label="Previous commitment"
           onClick={() => nudge(-1)}
-          glyph="←"
+          glyph="left"
           disabled={atStart}
         />
         <CarouselButton
           label="Next commitment"
           onClick={() => nudge(1)}
-          glyph="→"
+          glyph="right"
           disabled={atEnd}
         />
       </div>
@@ -125,7 +124,7 @@ function CarouselButton({
 }: {
   label: string;
   onClick: () => void;
-  glyph: string;
+  glyph: "left" | "right";
   disabled: boolean;
 }) {
   return (
@@ -136,7 +135,7 @@ function CarouselButton({
       className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line-strong text-ink transition-colors duration-150 hover:border-ink hover:bg-surface-2 disabled:pointer-events-none disabled:opacity-30"
     >
       <span className="sr-only">{label}</span>
-      <span aria-hidden="true">{glyph}</span>
+      <Arrow direction={glyph} className="text-[15px]" />
     </button>
   );
 }

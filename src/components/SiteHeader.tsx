@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { DeskStatusCall, DeskStatusLine } from "@/components/DeskStatus";
 import { Logo } from "@/components/Logo";
 import { MegaMenu } from "@/components/MegaMenu";
+import { Arrow } from "@/components/ui/Arrow";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Section";
 import { regions } from "@/lib/content/regions";
@@ -91,7 +92,7 @@ export function SiteHeader() {
     >
       <Container>
         <div className="flex h-[60px] items-center gap-4 sm:h-[68px] md:h-[76px] lg:gap-6">
-          <Logo compactTagline />
+          <Logo />
 
           <nav aria-label="Primary" className="hidden lg:block">
             <ul className="flex items-center gap-1">
@@ -203,9 +204,7 @@ export function SiteHeader() {
                         }`}
                       >
                         {item.label}
-                        <span aria-hidden="true" className="text-ink-45">
-                          →
-                        </span>
+                        <Arrow direction="right" className="text-ink-45" />
                       </Link>
                     </li>
                   ),
@@ -292,10 +291,8 @@ function MobileGroup({
             href={allHref}
             className="flex h-11 items-center pl-4 text-[15px] font-medium text-ink"
           >
-            {allLabel}{" "}
-            <span aria-hidden="true" className="ml-1.5 text-accent">
-              →
-            </span>
+            {allLabel}
+            <Arrow direction="right" className="ml-1.5 text-accent" />
           </Link>
         </li>
       </ul>

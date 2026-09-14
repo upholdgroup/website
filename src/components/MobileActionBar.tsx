@@ -1,3 +1,4 @@
+import { Arrow } from "@/components/ui/Arrow";
 import { site, telHref } from "@/lib/site";
 
 /**
@@ -14,9 +15,7 @@ export function MobileActionBar() {
           className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-accent text-[15px] font-medium text-white"
         >
           Request labour
-          <span aria-hidden="true" className="text-[12px]">
-            ↗
-          </span>
+          <Arrow direction="up-right" className="text-[13px]" />
         </a>
         <a
           href={telHref(site.phone)}

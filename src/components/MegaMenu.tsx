@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { DeskStatusLine } from "@/components/DeskStatus";
+import { Arrow } from "@/components/ui/Arrow";
 import { Container } from "@/components/ui/Section";
 import { regions } from "@/lib/content/regions";
 import { trades } from "@/lib/content/trades";
@@ -131,10 +132,8 @@ function ColumnHead({
         onClick={onNavigate}
         className="group text-[13px] font-medium text-ink-70 transition-colors duration-150 hover:text-accent"
       >
-        {cta}{" "}
-        <span aria-hidden="true" className="arrow-nudge inline-block">
-          →
-        </span>
+        {cta}
+        <Arrow direction="right" className="arrow-nudge ml-1.5" />
       </Link>
     </div>
   );

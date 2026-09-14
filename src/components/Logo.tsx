@@ -30,17 +30,9 @@ import { site } from "@/lib/site";
 export function Logo({
   tone = "ink",
   tagline = true,
-  /**
-   * Drops the tagline below 480px. The header wants this: a two line lockup
-   * beside a lone menu button leaves it lopsided, and the descriptor is the
-   * part a phone can afford to lose. The footer, which has a column to itself,
-   * does not.
-   */
-  compactTagline = false,
 }: {
   tone?: "ink" | "on-ink";
   tagline?: boolean;
-  compactTagline?: boolean;
 }) {
   const onInk = tone === "on-ink";
   const pathname = usePathname();
@@ -89,9 +81,14 @@ export function Logo({
             /* Letterspaced to run close to the width of the wordmark above it,
                so the two lines read as one block rather than two stacked
                labels. Any wider and the tagline starts to lead the lockup. */
+            /* Shown at every width. It used to be hidden below 480px, which
+               meant it never appeared on a phone at all: every current iPhone
+               is 390 to 430px wide. The lockup measures about 175px of the
+               290px the header has spare at 390px, so there was room for it
+               the whole time. */
             className={`text-[8px] leading-[1.35] font-medium tracking-[0.085em] whitespace-nowrap uppercase ${
-              compactTagline ? "hidden sm:block" : ""
-            } ${onInk ? "text-white/55" : "text-ink-45"}`}
+              onInk ? "text-white/55" : "text-ink-45"
+            }`}
           >
             {site.wordmark.lockup}
           </span>

@@ -29,8 +29,6 @@ export function SiteFooter() {
             <Logo />
             <p className="mt-6 text-[15px] leading-[1.7] text-ink-70">
               {site.serviceArea.state}, {site.countryName}
-              <br />
-              We come to your site.
             </p>
             {/* Rendered only once there is a real ABN. An empty label reading
                 "ABN" with nothing after it is worse than no label. */}
