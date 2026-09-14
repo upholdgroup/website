@@ -1,97 +1,471 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design tokens. The whole palette hangs off --brand — change that one value
-   (and its two tints) to re-skin the page.
+   Uphold Group design tokens — design-system.md §2–4.
+
+   Honest black-on-white structure, one warm orange for action. The two card
+   surfaces carry meaning and must not be swapped: ink = the host path (hire
+   workers), warm grey = the worker path (find work). That contrast is how a
+   visitor tells the two journeys apart at a glance.
+
+   Deliberately light-only. The system is built on ink-on-paper contrast and a
+   single accent; a dark inversion would break the surface semantics above.
    --------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #16191c;
-  --muted: #6b7280;
+  --accent: #e85f2c;
+  --accent-press: #c44a1c;
+  --accent-tint: #fcede6;
 
-  --brand: #1c8f4b;        /* solid fills: roof, drum, canopies, progress */
-  --brand-line: #35a862;   /* line-art strokes */
-  --brand-soft: #e6f2e9;   /* progress track, ground haze */
+  --ink: #111111;
+  --ink-70: #4a4a45;
+  --ink-45: #8a8a85;
 
-  --rule: #dfe3e0;         /* horizon line */
+  /* Body and meta text sitting on the ink surface. */
+  --on-ink: #ffffff;
+  --on-ink-60: #a5a5a0;
+
+  --surface-1: #ffffff;
+  --surface-2: #f4f4f2;
+
+  --line: #e6e6e3;
+  --line-strong: #d8d8d3;
+}
+
+/* ---------------------------------------------------------------------------
+   Motion vocabulary.
+
+   Three curves and three durations, and everything on the site uses them. The
+   point is not the individual values, it is that a hover, a card arriving and
+   the hero all move with the same hand. Mixed easing is the single thing that
+   makes a site feel assembled rather than designed.
+
+   `standard` is the workhorse. `expo` is for the set pieces, where the long
+   flat tail makes a large movement land softly instead of arriving. `exit` is
+   the only one that starts fast, because something leaving should not linger.
+   --------------------------------------------------------------------------- */
+:root {
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* State change you should feel but not watch. */
+  --dur-1: 160ms;
+  /* Something arriving: a card, a panel, a revealed row. */
+  --dur-2: 420ms;
+  /* A set piece. The hero, and nothing else on a given screen. */
+  --dur-3: 780ms;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-brand: var(--brand);
-  --color-brand-line: var(--brand-line);
-  --color-brand-soft: var(--brand-soft);
-  --color-rule: var(--rule);
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-instrument-serif);
+  --color-accent: var(--accent);
+  --color-accent-press: var(--accent-press);
+  --color-accent-tint: var(--accent-tint);
+
+  --color-ink: var(--ink);
+  --color-ink-70: var(--ink-70);
+  --color-ink-45: var(--ink-45);
+
+  --color-on-ink: var(--on-ink);
+  --color-on-ink-60: var(--on-ink-60);
+
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  /* One typeface across the whole site. */
+  --font-sans: var(--font-archivo), "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Radius scale — inputs 8 · media/rows 16 · cards 20 · audience 24 · hero 28. */
+  --radius-input: 8px;
+  --radius-media: 16px;
+  --radius-card: 20px;
+  --radius-audience: 24px;
+  --radius-hero: 28px;
+
+  /* 480 / 768 / 1024 / 1280 — design-system.md §4. */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b0d0c;
-    --foreground: #edf0ee;
-    --muted: #8e968f;
+html {
+  /* Clears the sticky header when jumping to an in-page anchor. */
+  scroll-padding-top: 96px;
+}
 
-    --brand: #3fbc72;
-    --brand-line: #4fcb82;
-    --brand-soft: #16241c;
+/*
+  Deliberately no `scroll-behavior: smooth` here.
 
-    --rule: #232a26;
+  It reads as a nicety, but it applies to every programmatic scroll, and the
+  router scrolls to the top on each navigation. From 6000px down the homepage
+  that turned one tap into 1.3 seconds of animated scrolling before the new
+  page settled, which is the single largest thing making this site feel slow.
+  It also made the skip link crawl, when a skip link should be instant.
+
+  It never applied to a finger or a wheel in the first place: user scrolling
+  ignores this property. So removing it costs nothing and buys back the 1.3s.
+*/
+
+body {
+  background: var(--surface-1);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+  One typeface everywhere, so code and kbd do not fall back to the browser's
+  monospace. They stay distinguishable through a tint and tighter tracking.
+*/
+code,
+kbd,
+samp,
+pre {
+  font-family: inherit;
+  font-size: 0.94em;
+  letter-spacing: 0.01em;
+  background: var(--surface-2);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+/*
+  iOS paints a translucent dark box over any tapped link, button or label,
+  which on a filled button reads as the whole thing going dark and swallowing
+  its own text. Suppressed here; the :active states on Button give the feedback
+  instead, in the site's own colours.
+*/
+a,
+button,
+label,
+summary,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 2px orange ring at 2px offset, everywhere, gloves, sunlight, keyboards. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Type roles that recur often enough to earn a class.
+   --------------------------------------------------------------------------- */
+
+/*
+  Eyebrow: uppercase, letterspaced, never above 13px.
+
+  Set in Archivo like everything else. The label still reads as its own layer
+  through case, tracking and weight rather than through a second typeface.
+*/
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+  .eyebrow {
+    font-size: 12px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+/* Body measure, 62ch keeps a paragraph readable at any width. */
+.measure {
+  max-width: 62ch;
 }
 
-/* --- Motion ---------------------------------------------------------------
-   Each pan track holds 3 identical tiles, so shifting the track by exactly
-   -33.3333% equals one tile width at any scale. That keeps the loop seamless
-   without hard-coding pixel widths.
-   -------------------------------------------------------------------------- */
-@keyframes pan {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-33.3333%, 0, 0); }
-}
-
-@keyframes fill {
-  0%   { width: 4%; }
-  70%  { width: 63%; }
-  100% { width: 68%; }
-}
-
-@keyframes breathe {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.62; }
-}
-
+/* ---------------------------------------------------------------------------
+   Motion. Everything here is switched off under prefers-reduced-motion at the
+   foot of this file.
+   --------------------------------------------------------------------------- */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.animate-pan      { animation: pan 72s linear infinite; will-change: transform; }
-.animate-pan-far  { animation: pan 150s linear infinite; will-change: transform; }
-.animate-rise     { animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-rise {
+  animation: rise 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
 
-/* One declaration, two animations: the bar eases up to its resting value and
-   only then starts breathing. Two separate classes would clobber each other. */
-.animate-progress {
-  animation:
-    fill 14s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-    breathe 3s ease-in-out 14s infinite;
+/*
+  Scroll reveal, driven by src/components/ui/Reveal.tsx.
+
+  The attribute is only added after mount, and never to something already on
+  screen, so server rendered HTML is never hidden and nothing that the reader
+  is already looking at animates underneath them.
+*/
+[data-reveal] {
+  transition:
+    opacity 0.45s ease-out,
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-reveal="out"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  Cards lift on hover with a shadow, not with a transform. Pointer devices only.
+
+  It used to be `translateY(-3px)`, which moved the card's own body copy. A
+  transform promotes the element to its own layer and re-rasterises the text
+  inside it at fractional pixel offsets, so every glyph on the card went soft
+  for the length of the transition and snapped back at the end: measured at 9%
+  of its edge sharpness, on every hover, across the audience cards, the trade
+  and region tiles and the job rows.
+
+  A shadow reads as the same lift and moves nothing. The `box-shadow`
+  transition was already declared here, for a shadow that was never actually
+  set; it does the work now.
+*/
+@media (hover: hover) {
+  .lift {
+    transition: box-shadow 0.24s var(--ease-standard);
+  }
+
+  .lift:hover {
+    box-shadow: 0 8px 24px -10px rgb(17 17 17 / 0.22);
+  }
+}
+
+/* The accordion panel opens by height rather than by cutting to its size. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.panel > * {
+  overflow: hidden;
+}
+
+/*
+  The contents are not painted while the row is shut or shutting.
+
+  Closing reverses the problem opening had. The surface returns to light in
+  one frame, correctly, but the panel is still collapsing behind it for
+  another 240ms, and everything inside it is coloured for the dark surface it
+  no longer has: the link measured a separation of 17 of 255 on its way out.
+  Dropping the contents in the same frame as the surface keeps the two honest
+  about each other. The box still collapses; there is simply nothing
+  illegible inside it while it does.
+*/
+.panel[data-open="false"] > * {
+  opacity: 0;
+}
+
+/*
+  Swapping a surface between light and dark: do it in one frame, not over time.
+
+  This was cross-faded, then synchronised, then stepped at the midpoint, and
+  each attempt moved the artefact rather than removing it. The reason is
+  structural. The row carries a label that must go dark-on-light to
+  light-on-dark, and a panel whose body copy is coloured for the dark state
+  only. Interpolating the background drags every one of those children through
+  a window where it matches its own background: measured at a separation of 5
+  of 255 for the label, and 0 for the panel copy, which is invisible.
+
+  No easing curve fixes that, because the crossing is the interpolation. So
+  the colour does not interpolate. The panel still animates open, which is
+  where the motion belongs; the surface underneath it is simply already the
+  right colour when it gets there.
+*/
+
+/* The orange arrow nudges toward its link on hover. */
+@media (hover: hover) {
+  .arrow-nudge {
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .group:hover .arrow-nudge {
+    transform: translateX(3px);
+  }
+}
+
+/* Entrance, on first paint. The hero does not wait for a scroll. */
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+.enter {
+  animation: enter-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* ---------------------------------------------------------------------------
+   Why the reveals are NOT scroll-driven.
+
+   They were, briefly, on a `view()` timeline. It looked like the modern answer
+   and it measured well, but a view timeline derives its progress from the
+   element's own geometry, so anything that changes size after it has revealed
+   recomputes its progress and jumps. Opening one row of the trades accordion
+   dropped that row to 0.47 opacity and back while it was turning black.
+
+   That is not a bug in the accordion. It is what a geometry-derived timeline
+   does to any element that resizes, and most interactive content resizes.
+
+   Scroll-linked animation earns its cost when you want the motion scrubbed to
+   scroll position. A reveal is a one-shot fade, so it is driven by
+   src/components/ui/Reveal.tsx: one shared observer, fired once per element,
+   then forgotten. Less per-frame work than the timeline version, and immune to
+   layout by construction. The transition below still runs on the compositor.
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   Page transition. See src/app/(site)/template.tsx for why it is opacity only
+   and why nothing animates on the way out.
+   --------------------------------------------------------------------------- */
+.page-enter {
+  animation: page-in 160ms var(--ease-standard) both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The hero headline.
+
+   Each line is masked and pushed up into place from under its own baseline, a
+   beat apart. It is the one true set piece on the site: it plays once, on
+   load, above the fold, and nothing else on that screen competes with it.
+
+   The wrapper needs the padding. `overflow: hidden` on a line box clips
+   descenders, and this headline ends on "Up." — the p would lose its tail.
+   The negative margin takes the space back out of the layout.
+   --------------------------------------------------------------------------- */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.line-mask > span {
+  display: block;
+  animation: line-up var(--dur-3) var(--ease-expo) both;
+}
+
+@keyframes line-up {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Header.
+   --------------------------------------------------------------------------- */
+
+/* The trades and regions panel drops in rather than appearing. 160ms, because
+   it is a navigation aid and the reader is already moving toward it. */
+@keyframes mega-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.animate-mega {
+  animation: mega-in 0.16s ease-out both;
+}
+
+/* The live ring around the hire-desk dot while the desk is answering. Slow and
+   low contrast on purpose: it is a status light, not an alarm. */
+@keyframes desk-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.animate-desk-ping {
+  animation: desk-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-pan,
-  .animate-pan-far,
-  .animate-progress,
   .animate-rise {
     animation: none;
+    opacity: 1;
+    transform: none;
   }
-  .animate-progress { width: 68%; }
-  .animate-rise { opacity: 1; transform: none; }
+
+  /* Never leave content hidden behind a transition that will not run. */
+  [data-reveal],
+  [data-reveal="out"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .enter {
+    animation: none;
+  }
+
+  .animate-mega {
+    animation: none;
+  }
+
+  /*
+    Scroll-driven motion off. Each one is neutralised at its finished state
+    rather than simply cancelled, because `both` fill would otherwise leave
+    these holding their opening frame: invisible content, permanently.
+  */
+  .page-enter,
+  .line-mask > span {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* The ring is removed entirely rather than frozen mid-scale, which would
+     leave a stray halo around the dot. The dot itself still carries the
+     state through its colour. */
+  .animate-desk-ping {
+    display: none;
+  }
+
+  .panel {
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

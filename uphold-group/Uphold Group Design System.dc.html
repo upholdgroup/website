@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #FFFFFF; color: #111111; font-family: 'Archivo', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #E85F2C; text-decoration: none; }
+  a:hover { color: #C44A1C; }
+  h1, h2, h3, h4, p { margin: 0; }
+</style>
+</helmet>
+
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px 120px;">
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between; padding: 48px 0 32px; border-bottom: 1px solid #E6E6E3;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 40px; height: 40px; border-radius: 999px; background: #E85F2C; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 17px; letter-spacing: -0.02em;">U</div>
+      <div style="font-size: 22px; font-weight: 700; letter-spacing: -0.03em;">uphold group<span style="color: #E85F2C;">.</span></div>
+    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8A85;">Design System — v1.1 — Construction Labour Hire, Greater Sydney</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; padding: 72px 0 88px;">
+    <h1 style="font-size: clamp(40px, 6vw, 68px); line-height: 0.98; letter-spacing: -0.035em; font-weight: 700;">Built to<br />Uphold<span style="color: #E85F2C;">.</span></h1>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #E85F2C; align-self: start;">SYDNEY · TWO AUDIENCES · NO PUBLISHED RATES</div>
+    <div style="display: flex; flex-direction: column; gap: 18px; max-width: 480px; padding-top: 8px;">
+      <p style="font-size: 17px; line-height: 1.5; color: #4A4A45;">A construction labour-hire identity system for Greater Sydney: honest black-on-white structure, one warm orange for action, full-bleed site photography, and generous rounded geometry.</p>
+      <p style="font-size: 17px; line-height: 1.5; color: #8A8A85;">Everything below is production tokens plus the component set required to build the Uphold Group site for its two audiences: builders who need a crew, and workers who need a shift.</p>
+    </div>
+  </div>
+
+  <!-- 01 PRINCIPLES -->
+  <div style="display: flex; align-items: baseline; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid #E6E6E3;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #E85F2C;">01</span>
+    <h2 style="font-size: 34px; letter-spacing: -0.03em; font-weight: 700;">Principles</h2>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 32px 0 96px;">
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #E85F2C;">01</div>
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">Proof over polish</h3>
+      <p style="font-size: 15px; line-height: 1.55; color: #6A6A64;">Real crews on real Sydney sites, real fill times, real names. Never illustrate what a photograph can prove, and never use stock hi-vis.</p>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #E85F2C;">02</div>
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">One loud colour</h3>
+      <p style="font-size: 15px; line-height: 1.55; color: #6A6A64;">Orange means "do this next". If more than one thing on screen is orange, the page has no priority.</p>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #E85F2C;">03</div>
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">Plain words</h3>
+      <p style="font-size: 15px; line-height: 1.55; color: #6A6A64;">Site managers arrive at 6am one crew short. Short sentences, trade language used correctly, timing said out loud.</p>
+    </div>
+    <div style="background: #111111; color: #fff; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #E85F2C;">04</div>
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">Never a price</h3>
+      <p style="font-size: 15px; line-height: 1.55; color: #A5A5A0;">No rate tables, no pricing page, no rates on job cards. Where a number would sit, state what the rate includes and offer a written quote the same day.</p>
+    </div>
+  </div>
+
+  <!-- 02 COLOUR -->
+  <div style="display: flex; align-items: baseline; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid #E6E6E3;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #E85F2C;">02</span>
+    <h2 style="font-size: 34px; letter-spacing: -0.03em; font-weight: 700;">Colour</h2>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; padding: 32px 0 24px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #E85F2C;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Signal Orange</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--accent<br />#E85F2C<br />oklch(0.66 0.17 42)</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #C44A1C;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Orange Press</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--accent-press<br />#C44A1C<br />hover / active only</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #FCEDE6;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Orange Tint</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--accent-tint<br />#FCEDE6<br />icon wells, badges</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #111111;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Ink</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--ink<br />#111111<br />headings, dark cards</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #4A4A45;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Ink 70</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--ink-70<br />#4A4A45<br />body copy</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #8A8A85;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Ink 45</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--ink-45<br />#8A8A85<br />meta, captions</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #F4F4F2; border: 1px solid #E6E6E3;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Surface Warm</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--surface-2<br />#F4F4F2<br />cards, list rows</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="height: 132px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E6E6E3;"></div>
+      <div style="font-size: 15px; font-weight: 600;">Paper</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.6;">--surface-1<br />#FFFFFF<br />page ground</div>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; padding-bottom: 96px;">
+    <div style="border: 1px solid #E6E6E3; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #E85F2C; letter-spacing: 0.06em;">RATIO</div>
+      <div style="font-size: 15px; line-height: 1.55; color: #4A4A45;">Ink on Paper = 17.4:1. Ink&nbsp;70 on Surface Warm = 8.6:1. Ink&nbsp;45 is caption-only, never under 14px.</div>
+    </div>
+    <div style="border: 1px solid #E6E6E3; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #E85F2C; letter-spacing: 0.06em;">ORANGE ON WHITE</div>
+      <div style="font-size: 15px; line-height: 1.55; color: #4A4A45;">3.4:1 — permitted for 32px+ display type and as a fill behind white text. Never for body copy or small links on white.</div>
+    </div>
+    <div style="border: 1px solid #E6E6E3; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #E85F2C; letter-spacing: 0.06em;">BUDGET</div>
+      <div style="font-size: 15px; line-height: 1.55; color: #4A4A45;">Max two orange elements per viewport. One black surface per section, max two per page.</div>
+    </div>
+  </div>
+
+  <!-- 03 TYPE -->
+  <div style="display: flex; align-items: baseline; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid #E6E6E3;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #E85F2C;">03</span>
+    <h2 style="font-size: 34px; letter-spacing: -0.03em; font-weight: 700;">Typography</h2>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 32px 0 32px;">
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em;">PRIMARY</div>
+      <div style="font-size: 52px; font-weight: 700; letter-spacing: -0.035em; line-height: 1;">Archivo</div>
+      <p style="font-size: 15px; line-height: 1.55; color: #6A6A64;">Grotesque with tight apertures. Weights 400 / 500 / 600 / 700 only. Fallback: Helvetica Neue, Helvetica, Arial.</p>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em;">UTILITY</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 44px; font-weight: 500; letter-spacing: -0.02em; line-height: 1;">JB Mono</div>
+      <p style="font-size: 15px; line-height: 1.55; color: #6A6A64;">Eyebrows, spec labels, job numbers, dates. Always uppercase, 0.08em tracking, never above 13px.</p>
+    </div>
+  </div>
+  <div style="border: 1px solid #E6E6E3; border-radius: 20px; overflow: hidden; margin-bottom: 96px;">
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 24px; align-items: center; padding: 24px 28px; border-bottom: 1px solid #E6E6E3;">
+      <div style="font-size: 64px; font-weight: 700; letter-spacing: -0.035em; line-height: 0.98;">Crews that turn up</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">DISPLAY / H1<br />64–68px · 700<br />-0.035em · lh 0.98</div>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 24px; align-items: center; padding: 24px 28px; border-bottom: 1px solid #E6E6E3;">
+      <div style="font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05;">What we supply</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">SECTION / H2<br />40px · 700<br />-0.03em · lh 1.05</div>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 24px; align-items: center; padding: 24px 28px; border-bottom: 1px solid #E6E6E3;">
+      <div style="font-size: 26px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25;">Scaffolders &amp; riggers</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">CARD / H3<br />22–26px · 500<br />-0.02em · lh 1.25</div>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 24px; align-items: center; padding: 24px 28px; border-bottom: 1px solid #E6E6E3;">
+      <div style="font-size: 28px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.4; color: #8A8A85;"><span style="color: #111111;">Every worker is interviewed and ticket-checked</span> before they leave our office — so the crew that shows up is the crew you were promised.</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">LEAD / STATEMENT<br />28–32px · 500<br />lh 1.4 · two-tone</div>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 24px; align-items: center; padding: 24px 28px; border-bottom: 1px solid #E6E6E3;">
+      <div style="font-size: 17px; line-height: 1.55; color: #4A4A45; max-width: 62ch;">Body copy sits at 16–17px with 1.55 line height and a 62-character measure. Paragraphs never exceed four lines, and every claim names a suburb, a ticket or a number.</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">BODY<br />16–17px · 400<br />lh 1.55 · 62ch</div>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 24px; align-items: center; padding: 24px 28px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8A85;">Job #UG-2041 · Parramatta · White Card verified</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">META / EYEBROW<br />11–13px · 500<br />0.08em · uppercase</div>
+    </div>
+  </div>
+
+  <!-- 04 GEOMETRY -->
+  <div style="display: flex; align-items: baseline; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid #E6E6E3;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #E85F2C;">04</span>
+    <h2 style="font-size: 34px; letter-spacing: -0.03em; font-weight: 700;">Space, radius &amp; grid</h2>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 32px 0 96px;">
+    <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em;">SPACE — 4PT BASE</div>
+      <div style="display: flex; align-items: flex-end; gap: 8px; height: 128px;">
+        <div style="width: 26px; height: 4px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 8px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 12px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 16px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 24px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 32px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 48px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 64px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 96px; background: #E85F2C;"></div>
+        <div style="width: 26px; height: 128px; background: #E85F2C;"></div>
+      </div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128<br />Card padding 28. Section rhythm 96 / 128.</div>
+    </div>
+    <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em;">RADIUS</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+        <div style="width: 74px; height: 74px; background: #F4F4F2; border: 1px solid #E6E6E3; border-radius: 8px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #8A8A85;">8</div>
+        <div style="width: 74px; height: 74px; background: #F4F4F2; border: 1px solid #E6E6E3; border-radius: 16px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #8A8A85;">16</div>
+        <div style="width: 74px; height: 74px; background: #F4F4F2; border: 1px solid #E6E6E3; border-radius: 20px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #8A8A85;">20</div>
+        <div style="width: 74px; height: 74px; background: #F4F4F2; border: 1px solid #E6E6E3; border-radius: 28px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #8A8A85;">28</div>
+        <div style="width: 74px; height: 74px; background: #F4F4F2; border: 1px solid #E6E6E3; border-radius: 999px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #8A8A85;">full</div>
+      </div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">8 inputs · 16 media · 20 cards · 28 hero &amp; banner · full for buttons, chips, avatars.</div>
+    </div>
+    <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em;">GRID</div>
+      <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 6px; height: 128px;">
+        <div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div><div style="background: #FCEDE6;"></div>
+      </div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7;">12 col · 24px gutter · 1240px max · 24px page margin.<br />Breakpoints 480 / 768 / 1024 / 1280.<br />Split sections use 4 / 8 (label left, content right).</div>
+    </div>
+  </div>
+
+  <!-- 05 COMPONENTS -->
+  <div style="display: flex; align-items: baseline; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid #E6E6E3;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #E85F2C;">05</span>
+    <h2 style="font-size: 34px; letter-spacing: -0.03em; font-weight: 700;">Components</h2>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">BUTTONS</div>
+  <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 28px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+    <button style="font-family: 'Archivo', sans-serif; border: 0; cursor: pointer; background: #E85F2C; color: #fff; font-size: 15px; font-weight: 500; padding: 14px 24px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; transition: background 160ms ease;" style-hover="background: #C44A1C;">Request labour <span style="font-size: 13px;">↗</span></button>
+    <button style="font-family: 'Archivo', sans-serif; border: 0; cursor: pointer; background: #111111; color: #fff; font-size: 15px; font-weight: 500; padding: 14px 24px; border-radius: 999px; transition: background 160ms ease;" style-hover="background: #2E2E2A;">Secondary</button>
+    <button style="font-family: 'Archivo', sans-serif; cursor: pointer; background: transparent; color: #111111; border: 1px solid #D8D8D3; font-size: 15px; font-weight: 500; padding: 13px 23px; border-radius: 999px; transition: border-color 160ms ease;" style-hover="border-color: #111111;">Outline</button>
+    <button style="font-family: 'Archivo', sans-serif; border: 0; cursor: pointer; background: #F4F4F2; color: #111111; font-size: 15px; font-weight: 500; padding: 14px 24px; border-radius: 999px;" style-hover="background: #EAEAE6;">Quiet</button>
+    <button style="font-family: 'Archivo', sans-serif; border: 0; background: #F4F4F2; color: #B9B9B3; font-size: 15px; font-weight: 500; padding: 14px 24px; border-radius: 999px; cursor: not-allowed;">Disabled</button>
+    <button style="font-family: 'Archivo', sans-serif; border: 0; cursor: pointer; background: #E85F2C; color: #fff; font-size: 13px; font-weight: 500; padding: 10px 18px; border-radius: 999px;" style-hover="background: #C44A1C;">See All</button>
+    <button style="border: 0; cursor: pointer; background: #E85F2C; color: #fff; width: 44px; height: 44px; border-radius: 999px; font-size: 15px;" style-hover="background: #C44A1C;">→</button>
+    <button style="cursor: pointer; background: #fff; color: #111; border: 1px solid #D8D8D3; width: 44px; height: 44px; border-radius: 999px; font-size: 15px;" style-hover="border-color: #111111;">←</button>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; line-height: 1.7; width: 100%; padding-top: 6px;">Height 44 (large 52, small 36). Pill radius always. Arrow glyph ↗ on outbound / conversion actions only.</div>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">NAVIGATION</div>
+  <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 34px; height: 34px; border-radius: 999px; background: #E85F2C; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px;">U</div>
+      <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.03em;">uphold<span style="color: #E85F2C;">.</span></div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 4px; background: #F4F4F2; border-radius: 999px; padding: 5px;">
+      <a href="#nav" style="font-size: 14px; padding: 9px 18px; border-radius: 999px; background: #fff; color: #111111; font-weight: 500;">Hire workers</a>
+      <a href="#nav" style="font-size: 14px; padding: 9px 18px; border-radius: 999px; color: #6A6A64;">Find work</a>
+      <a href="#nav" style="font-size: 14px; padding: 9px 18px; border-radius: 999px; color: #6A6A64;">Trades</a>
+      <a href="#nav" style="font-size: 14px; padding: 9px 18px; border-radius: 999px; color: #6A6A64;">Sydney regions</a>
+      <a href="#nav" style="font-size: 14px; padding: 9px 18px; border-radius: 999px; color: #6A6A64;">Compliance</a>
+    </div>
+    <button style="font-family: 'Archivo', sans-serif; border: 0; cursor: pointer; background: #E85F2C; color: #fff; font-size: 14px; font-weight: 500; padding: 12px 20px; border-radius: 999px; display: inline-flex; gap: 8px;" style-hover="background: #C44A1C;">Get a crew <span style="font-size: 12px;">↗</span></button>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">TRADE ACCORDION — one open, black active row, circle deep-links to the trade page</div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="background: #111111; color: #fff; border-radius: 20px; padding: 26px 28px; display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 20px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <h3 style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">General labourers &amp; TAs</h3>
+        <p style="font-size: 15px; line-height: 1.55; color: #A5A5A0; max-width: 58ch;">White Card, site-ready and reliable. Clean-up crews, demo, materials handling and TA work for commercial builders — day rate or ongoing.</p>
+      </div>
+      <div style="width: 44px; height: 44px; border-radius: 999px; background: #E85F2C; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px;">↗</div>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" style-hover="background: #EAEAE6;">
+      <h3 style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">Carpenters &amp; formwork</h3>
+      <span style="color: #8A8A85; font-size: 15px;">↗</span>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" style-hover="background: #EAEAE6;">
+      <h3 style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em;">Traffic control &amp; spotters</h3>
+      <span style="color: #8A8A85; font-size: 15px;">↗</span>
+    </div>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">STAT CARD</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 44px;">
+      <div style="width: 44px; height: 44px; border-radius: 12px; background: #FCEDE6; display: flex; align-items: center; justify-content: center;"><div style="width: 16px; height: 16px; border: 2px solid #E85F2C; border-radius: 3px;"></div></div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 34px; font-weight: 700; letter-spacing: -0.03em;">1,240</div>
+        <div style="font-size: 13px; color: #8A8A85;">Sydney workers on the books</div>
+      </div>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 44px;">
+      <div style="width: 44px; height: 44px; border-radius: 12px; background: #FCEDE6; display: flex; align-items: center; justify-content: center;"><div style="width: 16px; height: 16px; border: 2px solid #E85F2C; border-radius: 999px;"></div></div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 34px; font-weight: 700; letter-spacing: -0.03em;">4hrs</div>
+        <div style="font-size: 13px; color: #8A8A85;">Average Sydney fill time</div>
+      </div>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 44px;">
+      <div style="width: 44px; height: 44px; border-radius: 12px; background: #FCEDE6; display: flex; align-items: center; justify-content: center;"><div style="width: 16px; height: 16px; background: #E85F2C; transform: rotate(45deg);"></div></div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 34px; font-weight: 700; letter-spacing: -0.03em;">98.4%</div>
+        <div style="font-size: 13px; color: #8A8A85;">Shifts filled as booked</div>
+      </div>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 44px;">
+      <div style="width: 44px; height: 44px; border-radius: 12px; background: #FCEDE6; display: flex; align-items: center; justify-content: center;"><div style="width: 16px; height: 16px; border: 2px solid #E85F2C;"></div></div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 34px; font-weight: 700; letter-spacing: -0.03em;">0 LTI</div>
+        <div style="font-size: 13px; color: #8A8A85;">Lost-time injuries, 24 months</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">PROJECT CARD — overlay caption on hover / featured</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+    <div style="border-radius: 16px; overflow: hidden; position: relative; height: 260px; background: repeating-linear-gradient(135deg, #EDEDEA 0 10px, #F6F6F4 10px 20px); display: flex; align-items: flex-end;">
+      <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A5A5A0;">site photo 4:3</div>
+      <div style="position: relative; width: 100%; padding: 20px; background: linear-gradient(to top, rgba(17,17,17,0.82), rgba(17,17,17,0));">
+        <div style="color: #fff; font-size: 20px; font-weight: 500; letter-spacing: -0.02em;">32-level residential tower</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #D8D8D3; padding-top: 4px;">PARRAMATTA · 24 LABOURERS · 14 MONTHS</div>
+      </div>
+    </div>
+    <div style="border-radius: 16px; overflow: hidden; position: relative; height: 260px; background: repeating-linear-gradient(135deg, #EDEDEA 0 10px, #F6F6F4 10px 20px); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A5A5A0;">project photo</div>
+    <div style="border-radius: 16px; overflow: hidden; position: relative; height: 260px; background: repeating-linear-gradient(135deg, #EDEDEA 0 10px, #F6F6F4 10px 20px); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A5A5A0;">project photo</div>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">TESTIMONIAL CARD</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 28px;">
+      <p style="font-size: 17px; line-height: 1.55; color: #2E2E2A;">We lost four labourers the week before a pour. I rang Uphold at 6am and had five on site by 10, all with current White Cards and inducted. They have been our first call for two years.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; border-top: 1px solid #E2E2DE; padding-top: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 999px; background: #E2E2DE;"></div>
+          <div>
+            <div style="font-size: 14px; font-weight: 600;">Dean Marchetti</div>
+            <div style="font-size: 12px; color: #8A8A85;">Site Manager · Parramatta</div>
+          </div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85;">JULY 2026</div>
+      </div>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 28px;">
+      <p style="font-size: 17px; line-height: 1.55; color: #2E2E2A;">Timesheets and the weekly invoice actually reconcile, and their insurance certificates were in my inbox before I asked. That is rarer than it should be.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; border-top: 1px solid #E2E2DE; padding-top: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 999px; background: #E2E2DE;"></div>
+          <div>
+            <div style="font-size: 14px; font-weight: 600;">Priya Raman</div>
+            <div style="font-size: 12px; color: #8A8A85;">Commercial Manager · North Sydney</div>
+          </div>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85;">MAY 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">FORM FIELDS</div>
+  <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+    <label style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A8A85;">FULL NAME</span>
+      <input defaultValue="Dean Marchetti" style="font-family: 'Archivo', sans-serif; font-size: 15px; padding: 13px 14px; border: 1px solid #D8D8D3; border-radius: 8px; background: #fff; color: #111;" />
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A8A85;">TRADE REQUIRED</span>
+      <select style="font-family: 'Archivo', sans-serif; font-size: 15px; padding: 13px 14px; border: 1px solid #D8D8D3; border-radius: 8px; background: #fff; color: #111;">
+        <option>General labourer</option>
+        <option>Carpenter</option>
+        <option>Scaffolder</option>
+        <option>Traffic controller</option>
+      </select>
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #E85F2C;">SITE SUBURB — REQUIRED</span>
+      <input placeholder="e.g. Parramatta" style="font-family: 'Archivo', sans-serif; font-size: 15px; padding: 13px 14px; border: 1px solid #E85F2C; border-radius: 8px; background: #fff; color: #111;" />
+      <span style="font-size: 12px; color: #E85F2C;">We crew Greater Sydney only — this confirms we cover the site.</span>
+    </label>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A8A85;">START</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 13px; padding: 9px 16px; border-radius: 999px; background: #111; color: #fff;">Tomorrow 6am</span>
+        <span style="font-size: 13px; padding: 9px 16px; border-radius: 999px; background: #F4F4F2; color: #4A4A45;">This week</span>
+        <span style="font-size: 13px; padding: 9px 16px; border-radius: 999px; background: #F4F4F2; color: #4A4A45;">Ongoing</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8A8A85; letter-spacing: 0.08em; padding: 40px 0 16px;">CTA BANNER</div>
+  <div style="border-radius: 28px; overflow: hidden; background: repeating-linear-gradient(135deg, #EDEDEA 0 10px, #F6F6F4 10px 20px); padding: 56px 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; align-items: center; margin-bottom: 96px;">
+    <div style="display: flex; flex-direction: column; gap: 18px; align-items: flex-start;">
+      <h2 style="font-size: 44px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.02;">Short a crew<br />for Monday?</h2>
+      <p style="font-size: 15px; line-height: 1.55; color: #4A4A45; max-width: 40ch;">Send the roles and tickets you need. We answer from 5:30am, seven days, and quote in writing the same day.</p>
+      <button style="font-family: 'Archivo', sans-serif; border: 0; cursor: pointer; background: #E85F2C; color: #fff; font-size: 15px; font-weight: 500; padding: 15px 26px; border-radius: 999px; display: inline-flex; gap: 10px;" style-hover="background: #C44A1C;">Request labour <span style="font-size: 13px;">↗</span></button>
+    </div>
+    <div style="min-height: 200px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A5A5A0;">crew photo — right half bleed</div>
+  </div>
+
+  <!-- 06 UX -->
+  <div style="display: flex; align-items: baseline; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid #E6E6E3;">
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #E85F2C;">06</span>
+    <h2 style="font-size: 34px; letter-spacing: -0.03em; font-weight: 700;">UX rules &amp; motion</h2>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 32px 0 0;">
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">Conversion path</h3>
+      <p style="font-size: 15px; line-height: 1.6; color: #6A6A64;">Primary CTA reachable within one screen at all times: sticky header button on desktop, fixed bottom bar with click-to-call on mobile. The host request form is 3 steps, 2 fields each; worker registration is 2 steps with no CV and no password.</p>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">Trust order</h3>
+      <p style="font-size: 15px; line-height: 1.6; color: #6A6A64;">Every page follows claim → proof → action. A claim without a fill time, ticket, suburb or named review next to it gets cut. Insurance and verification evidence sits above the fold for hosts.</p>
+    </div>
+    <div style="background: #F4F4F2; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">Motion</h3>
+      <p style="font-size: 15px; line-height: 1.6; color: #6A6A64;">160ms ease for hover, 240ms cubic-bezier(0.2,0.8,0.2,1) for accordion and drawers. Entrances: 12px rise + fade, once, staggered 60ms. No parallax, no autoplay carousels.</p>
+    </div>
+    <div style="background: #111111; color: #fff; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+      <h3 style="font-size: 20px; letter-spacing: -0.02em;">Accessibility</h3>
+      <p style="font-size: 15px; line-height: 1.6; color: #A5A5A0;">44px minimum targets — both audiences use phones in sunlight, often in gloves. 2px #E85F2C focus ring with 2px offset. Photo overlays get a solid gradient scrim, never opacity-reduced text. No hover-only affordances. Respect prefers-reduced-motion.</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px 0 0;">
+    <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 24px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #E85F2C; padding-bottom: 12px;">DO</div>
+      <div style="font-size: 15px; line-height: 1.7; color: #4A4A45;">Two-tone lead paragraphs · full-bleed crew photo above the headline · one black card to mark the host path and the active trade · operational numbers set large · suburbs named in body copy.</div>
+    </div>
+    <div style="border: 1px solid #E6E6E3; border-radius: 20px; padding: 24px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A8A85; padding-bottom: 12px;">DON'T</div>
+      <div style="font-size: 15px; line-height: 1.7; color: #4A4A45;">Published rate tables or dollar figures anywhere · gradient backgrounds · drop shadows on cards (use surface contrast) · orange body text · icon-only navigation · stock hi-vis photography · claims about cities we do not service.</div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

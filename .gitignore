@@ -46,3 +46,14 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.data/
+
+# Database snapshots from `npm run db:backup`. Personal information and
+# password hashes: never commit these.
+/backups/
+
+# Live credentials for pasting into the host. Never committed.
+DEPLOYMENT-SECRETS.md
+
+# Redundant: the same content is committed unpacked in uphold-group/
+Uphold Group Design System.zip

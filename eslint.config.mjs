@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Supplied design assets — reference material, not application source.
+    "uphold-group/**",
   ]),
 ]);
 
