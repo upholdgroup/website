@@ -64,35 +64,113 @@ export async function deliverEnquiry(enquiry: Enquiry): Promise<void> {
 }
 
 /**
- * The alert. Short enough to read on a lock screen, and front-loaded: what
- * kind of job, where, and when it starts, before anything else. The mobile is
- * on its own line because Telegram turns it into a tap-to-call link.
+ * Groups an Australian mobile the way it is written: 0435 869 082.
+ *
+ * Telegram still turns it into a tap-to-call link, and a consultant reading a
+ * ten digit run at 6am to key into a handset should not have to count.
+ */
+function spacedPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 10 && digits.startsWith("04")) {
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
+  }
+  return raw;
+}
+
+/** Sydney time, because the desk is in Sydney and so is the site. */
+const sydneyTime = (iso: string) =>
+  new Date(iso).toLocaleTimeString("en-AU", {
+    timeZone: "Australia/Sydney",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+/**
+ * How loudly to announce it.
+ *
+ * A crew wanted on site tomorrow at 6am and a speculative "ongoing" enquiry
+ * are the same database row and completely different mornings. The first
+ * needs someone to move now; the second can wait until the desk opens. The
+ * banner says which without the reader having to parse the body.
+ */
+function urgency(start: string): { flag: string; line: string } {
+  if (start === "tomorrow-6am") return { flag: "🔴", line: "NEEDED TOMORROW 6AM" };
+  if (start === "this-week") return { flag: "🟠", line: "NEEDED THIS WEEK" };
+  return { flag: "🔶", line: "" };
+}
+
+/**
+ * The alert.
+ *
+ * Built to be read on a lock screen without opening it, so it is ordered by
+ * what a consultant decides on rather than by the order of the form: the ask
+ * first, then where and when, then who to ring. Everything else is below the
+ * fold of a notification and can wait until the app is open.
+ *
+ * The reference sits in <code> because Telegram makes a code span tap-to-copy
+ * on mobile, which is what a consultant does with it before opening the desk.
  */
 async function pingTelegram(record: StoredEnquiry): Promise<void> {
   const host = record.kind === "host-request";
-  const name = esc(String(record.fields.name ?? "Someone"));
-  const phone = esc(String(record.fields.phone ?? ""));
-  const suburb = esc(String(record.fields.suburb ?? record.fields.preferredRegion ?? ""));
-  const start = esc(readable("start", String(record.fields.start ?? "")));
+  const f = record.fields;
+  const get = (key: string) => (typeof f[key] === "string" ? (f[key] as string) : "");
+  const list = (key: string) => (Array.isArray(f[key]) ? (f[key] as string[]) : []);
 
-  const headline = host
-    ? `🔶 <b>Labour request</b>${suburb ? ` · ${suburb}` : ""}${start ? ` · ${start}` : ""}`
-    : `🔷 <b>Worker registration</b>${suburb ? ` · ${suburb}` : ""}`;
+  const name = esc(get("name") || "Someone");
+  const phone = esc(spacedPhone(get("phone")));
+  const suburb = esc(get("suburb"));
+  const at = sydneyTime(record.receivedAt);
+  const link = `${site.url}/admin/enquiries/${record.reference}`;
 
-  await sendTelegram(
-    [
-      headline,
-      "",
-      `<b>${name}</b>`,
-      phone,
-      "",
-      esc(summarise(record)),
-      "",
-      `<a href="${site.url}/admin/enquiries/${record.reference}">Open ${esc(record.reference)}</a>`,
-    ]
-      .filter((line) => line !== undefined && line !== "undefined")
-      .join("\n"),
-  );
+  const lines: string[] = [];
+
+  if (host) {
+    const { flag, line } = urgency(get("start"));
+    const count = get("workers");
+    const what = list("trades").map((t) => readable("trades", t)).join(", ") || "Crew";
+
+    lines.push(`${flag} <b>LABOUR REQUEST</b>${line ? ` · <b>${line}</b>` : ""}`);
+    lines.push("");
+    // The ask, in one line, because this is the whole decision.
+    lines.push(`<b>${count ? `${esc(count)} × ` : ""}${esc(what)}</b>`);
+    if (suburb) lines.push(`${suburb}${get("start") ? ` · ${esc(readable("start", get("start")))}` : ""}`);
+  } else {
+    lines.push("🔷 <b>WORKER REGISTRATION</b>");
+    lines.push("");
+    lines.push(`<b>${esc(readable("trade", get("trade")) || "Worker")}</b>`);
+    if (suburb) lines.push(suburb);
+  }
+
+  lines.push("");
+  lines.push(`<b>${name}</b>${host && get("company") ? ` · ${esc(get("company"))}` : ""}`);
+  if (phone) lines.push(phone);
+
+  const tickets = list("tickets");
+  if (tickets.length) {
+    lines.push("");
+    lines.push(`<b>Tickets</b> · ${tickets.map((t) => esc(t)).join(" · ")}`);
+  }
+
+  if (host && get("notes")) {
+    lines.push("");
+    lines.push(`<blockquote>${esc(get("notes"))}</blockquote>`);
+  }
+
+  if (get("role")) {
+    lines.push("");
+    lines.push(`Applying for <code>${esc(get("role"))}</code>`);
+  }
+
+  if (record.attachments.length > 0) {
+    lines.push("");
+    lines.push(`⚠️ ${record.attachments.length} ticket photo(s) chosen but NOT stored. Ask at interview.`);
+  }
+
+  lines.push("");
+  lines.push(`<code>${esc(record.reference)}</code> · ${at}`);
+  lines.push(`<a href="${link}">Open in the hire desk →</a>`);
+
+  await sendTelegram(lines.join("\n"));
 }
 
 const LABELS: Record<string, string> = {
