@@ -41,6 +41,74 @@ export function supabase(): SupabaseClient {
 }
 
 /**
+ * True while `next build` is prerendering.
+ *
+ * Set by Next itself (see PHASE_PRODUCTION_BUILD in its constants), and the
+ * only way to tell a page being generated at build time from the same page
+ * being rendered for a visitor. The two want opposite behaviour when the
+ * database is unreachable, which is what `readWithRetry` below uses it for.
+ */
+export const isBuildPhase = (): boolean =>
+  process.env.NEXT_PHASE === "phase-production-build";
+
+/**
+ * A read that survives a bad minute at the database.
+ *
+ * supabase-js returns a 504 as a value on `error`, not as a thrown exception,
+ * so a single Gateway Timeout used to propagate straight out of a repository
+ * and fail the whole deploy. A production build renders 58 pages and most of
+ * them read jobs; one blip anywhere in that took the site down with it, and
+ * blocked every unrelated change in the same push.
+ *
+ * So: retry transient failures, then diverge.
+ *
+ * At build time a still-failing read degrades to `fallback` and the deploy
+ * completes. Shipping a sitemap briefly short of its job URLs is a small,
+ * self-healing cost; a failed deploy is a total one, and it blocks everything
+ * behind it. The next build, or the next tag invalidation, puts them back.
+ *
+ * At runtime it throws, because a visitor silently seeing an empty job board
+ * is worse than an error the desk can see and act on.
+ */
+export async function readWithRetry<T>(
+  what: string,
+  /* PromiseLike, not Promise: a Supabase query builder is a thenable that
+     only becomes a request when it is awaited. */
+  read: () => PromiseLike<{ data: T | null; error: { message: string } | null }>,
+  fallback: T,
+): Promise<T> {
+  const attempts = 3;
+  let last = "";
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const { data, error } = await read();
+    if (!error) return data as T;
+
+    last = error.message;
+    // Only worth retrying what might succeed next time. A malformed query or
+    // a missing column will fail identically three times and just slow the
+    // build down while it does.
+    const transient = /timeout|gateway|fetch failed|network|socket|ECONN|503|504|429/i.test(
+      error.message,
+    );
+    if (!transient || attempt === attempts) break;
+
+    await new Promise((resolve) => setTimeout(resolve, 300 * 2 ** (attempt - 1)));
+  }
+
+  if (isBuildPhase()) {
+    console.error(
+      `[uphold] BUILD DEGRADED: could not read ${what} after ${attempts} attempts (${last}). ` +
+        `Continuing with an empty result so the deploy is not blocked. ` +
+        `This content will be missing until the next build or revalidation.`,
+    );
+    return fallback;
+  }
+
+  throw new Error(`Could not read ${what}: ${last}`);
+}
+
+/**
  * Guards every write to durable content.
  *
  * The test is the platform, not NODE_ENV: `next start` on a laptop and a CI

@@ -12,6 +12,18 @@ import { trades } from "@/lib/content/trades";
 import { jobPostingSchema } from "@/lib/schema";
 import { site, telHref } from "@/lib/site";
 
+/*
+  Next's default, stated explicitly because correctness now depends on it.
+
+  A role posted after the last build has to render on demand, and so does one
+  that generateStaticParams could not enumerate: if the database is unreachable
+  mid-build the read degrades to an empty list rather than failing the deploy
+  (see readWithRetry in src/lib/db/client.ts), and every job page falls through
+  to this path. Setting it to false would turn a bad minute at the database
+  into 404s on every live role.
+*/
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   return (await getAllJobs()).map((job) => ({ slug: job.slug }));
 }

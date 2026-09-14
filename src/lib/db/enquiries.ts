@@ -1,4 +1,4 @@
-import { driver, supabase } from "./client";
+import { driver, readWithRetry, supabase } from "./client";
 import { mutate, read } from "./local-store";
 import type { StoredEnquiry } from "./types";
 
@@ -34,15 +34,18 @@ export async function listEnquiries(limit = 200): Promise<StoredEnquiry[]> {
     return read((snapshot) => snapshot.enquiries.filter((e) => !e.deletedAt).slice(0, limit));
   }
 
-  const { data, error } = await supabase()
-    .from("enquiries")
-    .select("*")
-    .is("deleted_at", null)
-    .order("received_at", { ascending: false })
-    .limit(limit);
-
-  if (error) throw new Error(`Could not read enquiries: ${error.message}`);
-  return (data as Row[]).map(toEnquiry);
+  const rows = await readWithRetry<Row[]>(
+    "enquiries",
+    () =>
+      supabase()
+        .from("enquiries")
+        .select("*")
+        .is("deleted_at", null)
+        .order("received_at", { ascending: false })
+        .limit(limit),
+    [],
+  );
+  return rows.map(toEnquiry);
 }
 
 /** Archived rows only, newest first. The recycle bin behind the admin filter. */
@@ -51,15 +54,18 @@ export async function listArchivedEnquiries(limit = 200): Promise<StoredEnquiry[
     return read((snapshot) => snapshot.enquiries.filter((e) => e.deletedAt).slice(0, limit));
   }
 
-  const { data, error } = await supabase()
-    .from("enquiries")
-    .select("*")
-    .not("deleted_at", "is", null)
-    .order("deleted_at", { ascending: false })
-    .limit(limit);
-
-  if (error) throw new Error(`Could not read archived enquiries: ${error.message}`);
-  return (data as Row[]).map(toEnquiry);
+  const rows = await readWithRetry<Row[]>(
+    "archived enquiries",
+    () =>
+      supabase()
+        .from("enquiries")
+        .select("*")
+        .not("deleted_at", "is", null)
+        .order("deleted_at", { ascending: false })
+        .limit(limit),
+    [],
+  );
+  return rows.map(toEnquiry);
 }
 
 export async function getEnquiry(reference: string): Promise<StoredEnquiry | null> {

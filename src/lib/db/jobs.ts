@@ -1,6 +1,6 @@
 import { unstable_cache, updateTag } from "next/cache";
 import type { Job } from "@/lib/content/jobs";
-import { assertWritable, driver, supabase } from "./client";
+import { assertWritable, driver, readWithRetry, supabase } from "./client";
 import { mutate, read } from "./local-store";
 
 /**
@@ -71,13 +71,12 @@ async function fetchAll(): Promise<Job[]> {
     return read((snapshot) => [...snapshot.jobs]);
   }
 
-  const { data, error } = await supabase()
-    .from("jobs")
-    .select("*")
-    .order("posted", { ascending: false });
-
-  if (error) throw new Error(`Could not read jobs: ${error.message}`);
-  return (data as Row[]).map(fromRow);
+  const rows = await readWithRetry<Row[]>(
+    "jobs",
+    () => supabase().from("jobs").select("*").order("posted", { ascending: false }),
+    [],
+  );
+  return rows.map(fromRow);
 }
 
 /**
