@@ -33,10 +33,25 @@ try {
   process.exit(1);
 }
 
+/*
+  Quotes are stripped on the way out.
+
+  A .env file quotes any value containing spaces, and that quoting is syntax,
+  not part of the value. A hosting dashboard has no such syntax: paste a quoted
+  line in and the quotes become the value. That is how EMAIL_FROM reached
+  Resend as `"Uphold Group <...>"` and every notification failed with
+  "Invalid `from` field" while the enquiries themselves saved perfectly.
+*/
 const entries = env
   .split("\n")
   .map((line) => line.trim())
-  .filter((line) => line && !line.startsWith("#") && line.includes("="));
+  .filter((line) => line && !line.startsWith("#") && line.includes("="))
+  .map((line) => {
+    const at = line.indexOf("=");
+    const key = line.slice(0, at).trim();
+    const value = line.slice(at + 1).trim().replace(/^(['"])([\s\S]*)\1$/, "$2");
+    return `${key}=${value}`;
+  });
 
 // Only meaningful in production, so it is usually absent from .env.local.
 if (!entries.some((line) => line.startsWith("NEXT_PUBLIC_SITE_URL="))) {

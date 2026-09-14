@@ -7,8 +7,23 @@ import { Resend } from "resend";
  * sent, and `sent: false` comes back so the caller can say so. That is the
  * local development path — it is never a silent success.
  */
-const apiKey = process.env.RESEND_API_KEY?.trim();
-const from = process.env.EMAIL_FROM?.trim() || "Uphold Group <noreply@upholdgroup.com.au>";
+/**
+ * Strips wrapping quotes as well as whitespace.
+ *
+ * A .env file quotes any value containing spaces, so EMAIL_FROM is written
+ * `EMAIL_FROM="Uphold Group <admin@upholdgroup.com.au>"` on disk, and the
+ * quotes are syntax rather than part of the value. A hosting dashboard has no
+ * such syntax: paste that line in and the quotes become the value. Resend then
+ * rejects the whole send with "Invalid `from` field", and the enquiry is saved
+ * but nobody is told about it.
+ *
+ * Cheap to tolerate, expensive to miss.
+ */
+const clean = (value: string | undefined): string | undefined =>
+  value?.trim().replace(/^(['"])([\s\S]*)\1$/, "$2").trim();
+
+const apiKey = clean(process.env.RESEND_API_KEY);
+const from = clean(process.env.EMAIL_FROM) || "Uphold Group <noreply@upholdgroup.com.au>";
 
 export const emailConfigured = Boolean(apiKey);
 

@@ -13,8 +13,15 @@
  * `sent: false`, exactly like the email path, so the site runs identically
  * with or without it.
  */
-const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
-const chatId = process.env.TELEGRAM_CHAT_ID?.trim();
+/* Same treatment as EMAIL_FROM: a value pasted from a .env line can arrive
+   wrapped in the quotes that were only ever .env syntax. A chat id with a
+   stray quote on it comes back from Telegram as "chat not found", which
+   reads like a configuration mistake somewhere else entirely. */
+const clean = (value: string | undefined): string | undefined =>
+  value?.trim().replace(/^(['"])([\s\S]*)\1$/, "$2").trim();
+
+const token = clean(process.env.TELEGRAM_BOT_TOKEN);
+const chatId = clean(process.env.TELEGRAM_CHAT_ID);
 
 export const telegramConfigured = Boolean(token && chatId);
 
