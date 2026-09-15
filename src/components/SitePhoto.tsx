@@ -22,7 +22,7 @@ export function SitePhoto({
   radius = "rounded-hero",
   tone = "grey",
   seed = 0,
-  sizes = "(min-width: 1280px) 1240px, 100vw",
+  sizes = "(min-width: 1760px) 1600px, 100vw",
   position,
 }: {
   /** What this shot must show. Rendered as the placeholder label. */

@@ -1,6 +1,18 @@
 import type { ReactNode } from "react";
 
-/** 1240px measure, 20–24px page margin. Every band on the site sits in one. */
+/**
+ * The page frame. Every band on the site sits in one.
+ *
+ * Content runs to 1600px, with side margins that grow with the screen
+ * (5% of the width, between 24 and 80px) instead of a fixed 24px that suddenly
+ * turns into hundreds of pixels of white once a 1240px cap is reached. On a
+ * full-screen laptop the page now fills the display; on a very large monitor
+ * it still stops at 1600px of content, because body copy stretched wider than
+ * that stops being readable.
+ *
+ * Paragraph length is held separately, by a measure on the text itself, so a
+ * wider frame never means longer lines to read.
+ */
 export function Container({
   children,
   className = "",
@@ -8,7 +20,11 @@ export function Container({
   children: ReactNode;
   className?: string;
 }) {
-  return <div className={`mx-auto w-full max-w-[1240px] px-5 md:px-6 ${className}`}>{children}</div>;
+  return (
+    <div className={`mx-auto w-full max-w-[1760px] px-5 md:px-[clamp(24px,5vw,80px)] ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 /**

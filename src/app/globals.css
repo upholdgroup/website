@@ -177,6 +177,19 @@ summary,
   }
 }
 
+/*
+  A ceiling on every paragraph in the public site.
+
+  The page frame now runs to 1600px, and a paragraph given a wide grid column
+  would otherwise run past a hundred characters a line. 72ch only ever caps;
+  anything already narrower is untouched. Scoped to the site's main element
+  (`data-frame` in (site)/layout.tsx) so the admin, which centres some of its
+  text, is not affected.
+*/
+main[data-frame] p {
+  max-width: 72ch;
+}
+
 /* Body measure, 62ch keeps a paragraph readable at any width. */
 .measure {
   max-width: 62ch;

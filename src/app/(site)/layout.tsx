@@ -11,7 +11,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <>
       <SiteHeader />
-      <main id="main">{children}</main>
+      <main id="main" data-frame>{children}</main>
       <SiteFooter />
       <MobileActionBar />
     </>

@@ -1,22 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
 import { AudienceCards } from "@/components/AudienceCards";
-import {
-  CtaBanner,
-  FaqList,
-  InclusionsCard,
-  ProofChips,
-  RegionTiles,
-  StatGrid,
-  StepList,
-} from "@/components/blocks";
-import { JobList } from "@/components/JobList";
-import { SitePhoto } from "@/components/SitePhoto";
-import { photos } from "@/lib/content/photos";
+import { CtaBanner, RegionTiles, StatGrid } from "@/components/blocks";
 import { Commitments } from "@/components/Commitments";
+import { FaqAccordion } from "@/components/FaqAccordion";
+import { JobList } from "@/components/JobList";
 import { TradeAccordion } from "@/components/TradeAccordion";
 import { Button } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
 import { JsonLd } from "@/components/ui/JsonLd";
+import { Reveal } from "@/components/ui/Reveal";
 import {
   Container,
   Section,
@@ -24,11 +16,12 @@ import {
   SplitSection,
   TwoToneLead,
 } from "@/components/ui/Section";
-import { getLiveJobs } from "@/lib/db/jobs";
-import { regions } from "@/lib/content/regions";
-import { complianceFaqs, hiringSteps } from "@/lib/content/site-facts";
 import { commitments } from "@/lib/content/commitments";
+import { photos } from "@/lib/content/photos";
+import { regions } from "@/lib/content/regions";
+import { complianceFaqs } from "@/lib/content/site-facts";
 import { trades } from "@/lib/content/trades";
+import { getLiveJobs } from "@/lib/db/jobs";
 import { faqSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 
@@ -36,87 +29,98 @@ export const metadata = {
   alternates: { canonical: "/" },
 };
 
+/**
+ * The homepage, composed the way the reference is.
+ *
+ * The rule the order follows is rhythm: never two text sections in a row.
+ * Photography, cards and accordions alternate, and sections are separated by
+ * white space rather than divider lines, which is what stopped the page
+ * reading as a document.
+ *
+ * How hiring works and One rate used to sit here as well. Both live in full
+ * on the labour hire page, which is where a host deciding how to book goes.
+ */
 export default async function Home() {
   const jobs = (await getLiveJobs()).slice(0, 3);
   const regionName = (slug: string) => regions.find((r) => r.slug === slug)?.name ?? "Greater Sydney";
 
   return (
     <>
-      {/*
-        2 + 3. The hero is one <section>, not a container followed by one.
-
-        That matters for snapping: sections are the snap targets, so a hero
-        that was not one meant the first target sat 772px down the page and
-        mandatory snapping jumped there on load, taking the photo off screen
-        entirely. As a section its snap position clamps to the top of the
-        document, so the page opens where it should.
-      */}
-      <section className="pt-5 md:pt-6">
-        <Container>
-          <SitePhoto
-            caption={photos.hero.alt}
+      {/* 1. Hero. A rounded photo inset from the edges of the screen, with the
+          header floating over its top, then the headline on white below it. */}
+      <section className="px-3 pt-3 md:px-4 md:pt-4">
+        {/* A fixed shape that scales as a whole, rather than a width that
+            follows the screen and a height that follows the window, which made
+            the crop change with every browser size. 2.4:1 from lg is almost the
+            photo's own 2.36:1, so nearly nothing is cut. Phones get a taller
+            shape so the three workers are not a sliver, and a ceiling of 72% of
+            the screen height keeps a short laptop window from losing the
+            headline below the fold. */}
+        <div className="relative mx-auto aspect-[5/4] max-h-[72svh] w-full max-w-[1728px] overflow-hidden rounded-[24px] bg-ink sm:aspect-[16/10] md:aspect-[2/1] md:rounded-[32px] lg:aspect-[2.4/1]">
+          <Image
             src={photos.hero.src}
             alt={photos.hero.alt}
-            position={photos.hero.position}
+            fill
             priority
-            /* The shot is 2.36:1 and cinematic, so the slot widens rather
-               than cropping it back to 16:9 on a phone: at 16:9 a quarter of
-               the frame goes, taking the Opera House and the bridge with it.
-               2:1 on a phone keeps them and still stands 195px tall at 390px
-               wide, which is enough presence for a hero. */
-            className="aspect-[2/1] w-full sm:aspect-[2.2/1] lg:aspect-[2.4/1]"
+            sizes="100vw"
+            /* The crew stand in the right of a very wide frame. On a narrow
+               phone slot the window has to move right to keep all three. */
+            className="object-cover object-[72%_50%] md:object-[58%_50%]"
           />
-        </Container>
+          {/* The header sits on this photo. A fade across the top edge gives the
+              white logo and tagline something to read against without darkening
+              the crew below it. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-ink/75 via-ink/30 to-transparent md:h-44 md:from-ink/60 md:via-ink/25"
+          />
+        </div>
 
-        <Container className="py-10 md:py-12 lg:py-14">
-          <div className="grid gap-8 lg:grid-cols-12 lg:gap-6">
-            {/* Two masked lines, each pushed up into place from under its own
-                baseline a beat apart. The <br/> is gone: the lines are real
-                blocks now, which is what gives each one an edge to rise from.
-                It still reads as one heading to a screen reader. */}
-            <h1 className="text-[44px] leading-[0.98] font-bold tracking-[-0.035em] sm:text-[56px] lg:col-span-6 lg:text-[64px]">
+        <Container className="pt-8 pb-14 md:pt-10 md:pb-20">
+          <div className="grid gap-6 lg:grid-cols-12 lg:gap-6">
+            {/* Two masked lines, each rising from under its own baseline. The
+                accent sits on the promise, the way the reference puts it on
+                "Last." */}
+            <h1 className="text-[44px] leading-[0.98] font-bold tracking-[-0.035em] sm:text-[56px] lg:col-span-7 lg:text-[68px]">
+              {/* Balanced, so a phone breaks it "Crews That / Turn Up." rather
+                  than stranding "Up." alone on its own line. */}
               <span className="line-mask">
-                <span>Crews That Turn Up.</span>
+                <span className="[text-wrap:balance]">Crews That Turn Up.</span>
               </span>
               <span className="line-mask">
-                <span className="[animation-delay:110ms]">On Time.</span>
+                <span className="text-accent [animation-delay:110ms]">On Time.</span>
               </span>
             </h1>
 
-            {/* Last in, after both headline lines have landed. */}
-            <div className="enter flex flex-col gap-6 [animation-delay:340ms] lg:col-span-6 lg:pt-2">
-              <p className="text-[17px] leading-[1.55] text-ink-70 md:text-[18px]">
-                Uphold Group is a Sydney construction contracting, labour hire and recruitment
-                company. We supply ticketed labourers, trades and civil crews to builders and
-                subcontractors across Greater Sydney, and take on packages of work with our own
-                crew, on a casual, contract or permanent basis.
-              </p>
-              <ProofChips />
-            </div>
+            <p className="enter max-w-[40ch] text-[15px] leading-[1.6] text-ink-45 [animation-delay:340ms] md:text-[16px] lg:col-span-4 lg:col-start-9 lg:pt-3">
+              Construction contracting, labour hire and recruitment across Greater Sydney.
+              Ticketed crews on a casual, contract or permanent basis, most requests filled
+              within four hours.
+            </p>
           </div>
         </Container>
       </section>
 
-      {/* 4. The two doors. */}
+      {/* 2. The two doors: host and worker, before either reads a word more. */}
       <AudienceCards />
 
-      {/* 5. Verification promise, two-tone. Once per page. */}
-      <Section tight className="border-y border-line bg-surface-1">
+      {/* 3. Verification promise, two-tone. */}
+      <Section>
         <Container>
           <Reveal>
             <TwoToneLead
-            lead="Every worker is interviewed, ticket-checked and site-inducted before they reach your gate,"
+              lead="Every worker is interviewed, ticket-checked and site-inducted before they reach your gate,"
               tail="so the crew that shows up is the crew you were promised."
             />
           </Reveal>
         </Container>
       </Section>
 
-      {/* 6. Trades accordion. The site's main internal SEO link path. */}
+      {/* 4. What we supply. The site's main internal link path to trade pages. */}
       <SplitSection
         id="trades"
         label="What we supply"
-        lead="Trades and labour across commercial construction, civil and infrastructure, fitout and warehousing, plus site cleaning and licensed security, all of it in Greater Sydney. Every trade below has its own page with tickets held and typical scope."
+        lead="Trades and labour across commercial construction, civil and infrastructure, fitout and warehousing, plus site cleaning and licensed security. Every trade has its own page with tickets held and typical scope."
         aside={
           <Button href="/trades" variant="outline" arrow>
             All trades &amp; classifications
@@ -126,32 +130,11 @@ export default async function Home() {
         <TradeAccordion trades={trades} />
       </SplitSection>
 
-      {/* 7. Operational stats. */}
+      {/* 5. Operational figures. */}
       <StatGrid />
 
-      {/* 8. How hiring works. */}
-      <SplitSection
-        label="How hiring works"
-        lead="Three steps, no portal login, and a written quote before anyone is confirmed."
-      >
-        <StepList steps={hiringSteps} />
-      </SplitSection>
-
-      {/* 9. What one rate includes. Where a price would sit. */}
-      <SplitSection
-        label="One rate, everything in it"
-        lead="We quote a single hourly charge rate per classification, in writing, the same day you ask. No sign-on fees, no charge for replacements, no surprise line items at the end of the month."
-        aside={
-          <Button href="/request-labour" arrow>
-            Request a written quote
-          </Button>
-        }
-      >
-        <InclusionsCard />
-      </SplitSection>
-
-      {/* 10. Sydney regions. */}
-      <Section id="regions" tight className="bg-surface-1">
+      {/* 7. Sydney regions. */}
+      <Section id="regions">
         <Container>
           <Reveal>
             <SectionHeading
@@ -166,7 +149,7 @@ export default async function Home() {
         </Container>
       </Section>
 
-      {/* 12. Live jobs. No rate column. */}
+      {/* 8. Live jobs. No rate column. */}
       <SplitSection
         id="jobs"
         label="Live jobs this week"
@@ -186,42 +169,28 @@ export default async function Home() {
         </Link>
       </SplitSection>
 
-      {/* 13. What we commit to. This was a testimonial carousel until the
-          quotes in it turned out to be invented; see commitments.ts. */}
-      <Section tight className="bg-surface-1">
+      {/* 9. What we commit to, in the shape of the reference's stories. */}
+      <Section>
         <Container>
-          <Reveal>
-            <SectionHeading
-              title="What we commit to"
-              lead="The same terms on every booking, whatever the trade or the suburb. Each one is set out in full on the page it links to."
-            />
-          </Reveal>
-          <div className="mt-10">
-            <Commitments items={commitments} />
-          </div>
+          <Commitments title="What we commit to" items={commitments} />
         </Container>
       </Section>
 
-      {/* 14. Compliance FAQ. Objection handled immediately before the ask. */}
-      <Section id="faq" tight>
-        <Container>
-          <Reveal>
-            <SectionHeading
-              eyebrow="Compliance"
-              title="Compliance questions, answered"
-              lead="The questions builders actually ask before they book, answered straight."
-            />
-          </Reveal>
-          <div className="mt-10">
-            <FaqList faqs={complianceFaqs} />
-          </div>
-          <Button href="/compliance" variant="outline" arrow className="mt-8">
+      {/* 10. Compliance FAQ, as an accordion rather than a wall of answers. */}
+      <SplitSection
+        id="faq"
+        label="Compliance questions, answered"
+        lead="The questions builders actually ask before they book, answered straight."
+        aside={
+          <Button href="/compliance" variant="outline" arrow>
             Full compliance detail
           </Button>
-        </Container>
-      </Section>
+        }
+      >
+        <FaqAccordion faqs={complianceFaqs} />
+      </SplitSection>
 
-      {/* 15. CTA banner. */}
+      {/* 11. Photo CTA. */}
       <CtaBanner />
 
       <JsonLd data={faqSchema(complianceFaqs)} />

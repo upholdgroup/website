@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { DeskStatusCall, DeskStatusLine } from "@/components/DeskStatus";
+import { DeskStatusLine } from "@/components/DeskStatus";
 import { Logo } from "@/components/Logo";
 import { MegaMenu } from "@/components/MegaMenu";
 import { Arrow } from "@/components/ui/Arrow";
@@ -41,6 +41,41 @@ export function SiteHeader() {
 
   const closeAll = () => setMenu({ sheet: false, mega: false, at: pathname });
   const headerRef = useRef<HTMLElement>(null);
+
+  /*
+    On the homepage the header floats over the top of the hero photo, as in
+    the reference: transparent at the top, with the links in a white pill, and
+    solid white once the page has moved. Everywhere else it is the plain sticky
+    bar it has always been.
+
+    The scroll check is frame-throttled and only ever sets a boolean, and React
+    skips the render when the value has not changed, so scrolling costs one
+    comparison a frame. No backdrop-filter, which is what made an earlier
+    header shimmer on real hardware.
+  */
+  const overlay = pathname === "/";
+  const [atTop, setAtTop] = useState(true);
+
+  useEffect(() => {
+    if (!overlay) return;
+    let frame = 0;
+    const check = () => {
+      frame = 0;
+      setAtTop(window.scrollY < 24);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [overlay]);
+
+  const clear = overlay && atTop && !sheetOpen && !megaOpen;
+  const pill = clear ? "bg-surface-1 shadow-[0_1px_3px_rgb(17_17_17/0.1)]" : "bg-surface-2";
 
   // Escape closes whichever is open, and a click outside the header closes the
   // panel. Only bound while something is open, so the idle page carries no
@@ -88,14 +123,23 @@ export function SiteHeader() {
          flickers during momentum and overscroll on real hardware, and it is
          invisible in a headless browser, which composites differently. At 92%
          over a white page the blur was buying almost nothing to begin with. */
-      className="sticky top-0 z-40 border-b border-line bg-surface-1"
+      className={`${overlay ? "fixed inset-x-0" : "sticky"} top-0 z-40 border-b transition-colors duration-200 ${
+        clear ? "border-transparent bg-transparent" : "border-line bg-surface-1"
+      }`}
     >
-      <Container>
+      {/* The same top padding on every page, not just the homepage. It is what
+          seats the pills inside the hero photo there, and giving it to every
+          page keeps the logo in exactly the same place as you move around the
+          site: before, it jumped 16px between the homepage and the rest. */}
+      <Container className="pt-3 md:pt-4">
         <div className="flex h-[60px] items-center gap-4 sm:h-[68px] md:h-[76px] lg:gap-6">
-          <Logo />
+          {/* Straight on the photograph, no background behind it. White type
+              over the dark fade at the top of the hero; the grey tagline it
+              used to have measured a separation of 41 of 255 against the sky. */}
+          <Logo tone={clear ? "over-photo" : "ink"} />
 
-          <nav aria-label="Primary" className="hidden lg:block">
-            <ul className="flex items-center gap-1">
+          <nav aria-label="Primary" className="ml-auto hidden lg:block">
+            <ul className={`flex items-center gap-0.5 rounded-full p-1 ${pill}`}>
               {nav.map((item) =>
                 item.mega ? (
                   <li key={item.href}>
@@ -108,10 +152,10 @@ export function SiteHeader() {
                         setMenu({ sheet: false, mega: !megaOpen, at: pathname })
                       }
                       onMouseEnter={() => setMenu({ sheet: false, mega: true, at: pathname })}
-                      className={`inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[14px] whitespace-nowrap transition-colors duration-150 ${
+                      className={`inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-4 text-[14px] whitespace-nowrap transition-colors duration-150 ${
                         megaOpen || inTradesOrRegions
-                          ? "font-medium text-ink"
-                          : "text-ink-70 hover:text-ink"
+                          ? "font-medium text-accent"
+                          : "text-ink hover:text-accent"
                       }`}
                     >
                       {item.label}
@@ -126,10 +170,10 @@ export function SiteHeader() {
                       onMouseEnter={() =>
                         megaOpen && setMenu({ sheet: false, mega: false, at: pathname })
                       }
-                      className={`inline-flex h-11 items-center rounded-full px-3 text-[14px] whitespace-nowrap transition-colors duration-150 ${
+                      className={`inline-flex h-9 items-center rounded-full px-4 text-[14px] whitespace-nowrap transition-colors duration-150 ${
                         isActive(item.href)
-                          ? "font-medium text-ink"
-                          : "text-ink-70 hover:text-ink"
+                          ? "font-medium text-accent"
+                          : "text-ink hover:text-accent"
                       }`}
                     >
                       {item.label}
@@ -142,8 +186,8 @@ export function SiteHeader() {
 
           {/* ml-auto rather than justify-between: with the nav left aligned the
               right hand block has to be pushed, not spaced. */}
-          <div className="ml-auto flex items-center gap-3 lg:gap-4">
-            <DeskStatusCall className="hidden md:flex" />
+          <div className="ml-auto flex items-center gap-2 lg:ml-0 lg:gap-3">
+
 
             {/* Wrapped rather than given a `hidden` class: Button's own
                 `inline-flex` would win the display cascade. Below sm the CTA
@@ -163,7 +207,7 @@ export function SiteHeader() {
               /* Filled rather than outlined. A thin ring on an otherwise empty
                  header reads as a stray circle; a soft fill sits with the
                  rounded language and keeps the full 44px target. */
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink transition-colors duration-150 hover:bg-line lg:hidden"
+              className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-ink transition-colors duration-150 hover:bg-line lg:hidden ${pill}`}
             >
               <span className="sr-only">{sheetOpen ? "Close menu" : "Open menu"}</span>
               <MenuIcon open={sheetOpen} />
@@ -188,7 +232,7 @@ export function SiteHeader() {
              running under it: 60px header + 73px bar. A padded bottom would
              do the same job when the sheet is long, but leave a band of dead
              white under it when both groups are collapsed. */
-          className="max-h-[calc(100dvh-133px)] overflow-y-auto border-t border-line bg-surface-1 sm:max-h-[calc(100dvh-141px)] lg:hidden"
+          className="max-h-[calc(100dvh-145px)] overflow-y-auto border-t border-line bg-surface-1 sm:max-h-[calc(100dvh-153px)] lg:hidden"
         >
           <Container>
             <nav aria-label="Primary, mobile" className="py-3">

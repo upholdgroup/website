@@ -26,6 +26,17 @@ export function ProofChips({ items = site.proof }: { items?: readonly string[] }
   );
 }
 
+/**
+ * One icon per figure, in the order of `stats` in site-facts.ts: workers on the
+ * books, fill time, shifts filled, lost-time injuries.
+ */
+const STAT_ICONS = [
+  "M9 8.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3 15.5c.8-2.6 3.1-4 6-4s5.2 1.4 6 4",
+  "M9 16A7 7 0 1 0 9 2a7 7 0 0 0 0 14Zm0-10.5V9l2.5 1.5",
+  "M9 16A7 7 0 1 0 9 2a7 7 0 0 0 0 14ZM6 9.2l2 2 4-4",
+  "M9 2 3.5 4v4.5c0 3.4 2.3 5.9 5.5 7.5 3.2-1.6 5.5-4.1 5.5-7.5V4L9 2Z",
+];
+
 /** Operational metrics, four across. Never dollars. */
 export function StatGrid() {
   return (
@@ -33,25 +44,35 @@ export function StatGrid() {
       <Container>
         <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {stats.map((stat, i) => (
-            <Reveal as="li" key={stat.label} delay={i * 70} className="rounded-card bg-surface-2 p-6 md:p-7">
+            <Reveal
+              as="li"
+              key={stat.label}
+              delay={i * 70}
+              /* Tall, with the icon at the top and the figure at the foot, as
+                 in the reference: the space between them is what makes four
+                 numbers read as objects rather than a table row. */
+              className="card-surface flex min-h-[210px] flex-col justify-between rounded-card bg-surface-2 p-6 md:min-h-[260px] md:p-7"
+            >
               <span
                 aria-hidden="true"
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-accent-tint text-accent-press"
               >
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path
-                    d="M2 12.5 6.5 8l3.5 3.5L16 5"
+                    d={STAT_ICONS[i % STAT_ICONS.length]}
                     stroke="currentColor"
-                    strokeWidth="2"
+                    strokeWidth="1.8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                 </svg>
               </span>
-              <p className="mt-7 text-[30px] leading-none font-bold tracking-[-0.03em] md:text-[34px]">
-                <Counter value={stat.value} />
-              </p>
-              <p className="mt-2 text-[13px] leading-[1.4] text-ink-70">{stat.label}</p>
+              <div>
+                <p className="text-[38px] leading-none font-medium tracking-[-0.035em] md:text-[48px]">
+                  <Counter value={stat.value} />
+                </p>
+                <p className="mt-2 text-[13px] leading-[1.4] text-ink-45">{stat.label}</p>
+              </div>
             </Reveal>
           ))}
         </ul>
@@ -165,14 +186,23 @@ export function CtaBanner({
   photo?: { src: string; alt: string; position?: string };
 }) {
   return (
-    <Section tight>
-      <Container>
-        <div className="relative overflow-hidden rounded-hero bg-ink">
+    /* The same width as the hero photo, as in the reference: inset 12/16px
+       from the screen edge and capped at 1728px, rather than boxed inside the
+       content frame. The text inside is padded back in so it still lines up
+       with the page content above and below it. */
+    <Section tight className="px-3 md:px-4">
+        {/* The same proportions as the hero from tablet up. Set as a minimum
+            height worked out from the width, not as aspect-ratio: this box
+            clips its photo, and an aspect-ratio box that clips would also clip
+            its own text if the copy ever ran taller than the shape. A minimum
+            lets the text push it taller instead. On phones the text sets the
+            height, because no wide shape fits a headline and two buttons. */}
+        <div className="relative mx-auto flex max-w-[1728px] flex-col justify-center overflow-hidden rounded-[24px] bg-ink md:min-h-[calc(min(100vw_-_32px,1728px)/2)] md:rounded-[32px] lg:min-h-[calc(min(100vw_-_32px,1728px)/2.4)]">
           <Image
             src={photo.src}
             alt={photo.alt}
             fill
-            sizes="(min-width: 1280px) 1240px, 100vw"
+            sizes="(min-width: 1760px) 1728px, 100vw"
             style={photo.position ? { objectPosition: photo.position } : undefined}
             className="object-cover"
           />
@@ -192,7 +222,10 @@ export function CtaBanner({
             className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/60 to-transparent"
           />
 
-          <div className="relative p-8 md:p-12 lg:p-14 lg:pr-[45%]">
+          {/* Horizontal padding is the page frame's margin less the banner's
+              own inset, so the headline sits on the same line as every other
+              heading on the page. */}
+          <div className="relative px-6 py-10 md:px-[calc(clamp(24px,5vw,80px)-16px)] md:py-16 lg:py-20 lg:pr-[45%]">
             <h2 className="max-w-[14ch] text-[32px] leading-[1.02] font-bold tracking-[-0.035em] text-white text-balance md:text-[44px]">
               {title}
             </h2>
@@ -209,7 +242,6 @@ export function CtaBanner({
             </div>
           </div>
         </div>
-      </Container>
     </Section>
   );
 }

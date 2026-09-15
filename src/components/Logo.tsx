@@ -31,10 +31,15 @@ export function Logo({
   tone = "ink",
   tagline = true,
 }: {
-  tone?: "ink" | "on-ink";
+  /**
+   * `over-photo` is for the homepage header sitting on the hero image: white type, and the mark kept orange. No pill or white
+   * background behind it, by the business's choice.
+   */
+  tone?: "ink" | "on-ink" | "over-photo";
   tagline?: boolean;
 }) {
   const onInk = tone === "on-ink";
+  const overPhoto = tone === "over-photo";
   const pathname = usePathname();
 
   return (
@@ -69,7 +74,7 @@ export function Logo({
           /* Caps need room. The tight tracking the lowercase wordmark used
              closes the counters up and makes it read as one block. */
           className={`text-[15px] leading-[1.15] font-bold tracking-[0.01em] whitespace-nowrap ${
-            onInk ? "text-white" : "text-ink"
+            onInk || overPhoto ? "text-white" : "text-ink"
           }`}
         >
           {site.wordmark.text}
@@ -87,7 +92,7 @@ export function Logo({
                290px the header has spare at 390px, so there was room for it
                the whole time. */
             className={`text-[8px] leading-[1.35] font-medium tracking-[0.085em] whitespace-nowrap uppercase ${
-              onInk ? "text-white/55" : "text-ink-45"
+              onInk ? "text-white/55" : overPhoto ? "text-white" : "text-ink-45"
             }`}
           >
             {site.wordmark.lockup}
