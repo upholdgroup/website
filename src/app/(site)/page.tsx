@@ -65,7 +65,7 @@ export default async function Home() {
             sizes="100vw"
             /* The crew stand in the right of a very wide frame. On a narrow
                phone slot the window has to move right to keep all three. */
-            className="object-cover object-[72%_50%] md:object-[58%_50%]"
+            className="object-cover object-[82%_50%] md:object-[58%_50%]"
           />
           {/* The header sits on this photo. A fade across the top edge gives the
               white logo and tagline something to read against without darkening
@@ -76,12 +76,12 @@ export default async function Home() {
           />
         </div>
 
-        <Container className="pt-8 pb-14 md:pt-10 md:pb-20">
+        <Container className="pt-7 pb-8 md:pt-10 md:pb-20">
           <div className="grid gap-6 lg:grid-cols-12 lg:gap-6">
             {/* Two masked lines, each rising from under its own baseline. The
                 accent sits on the promise, the way the reference puts it on
                 "Last." */}
-            <h1 className="text-[44px] leading-[0.98] font-bold tracking-[-0.035em] sm:text-[56px] lg:col-span-7 lg:text-[68px]">
+            <h1 className="text-[40px] leading-[0.98] font-bold tracking-[-0.035em] sm:text-[56px] lg:col-span-7 lg:text-[68px]">
               {/* Balanced, so a phone breaks it "Crews That / Turn Up." rather
                   than stranding "Up." alone on its own line. */}
               <span className="line-mask">
@@ -92,7 +92,7 @@ export default async function Home() {
               </span>
             </h1>
 
-            <p className="enter max-w-[40ch] text-[15px] leading-[1.6] text-ink-45 [animation-delay:340ms] md:text-[16px] lg:col-span-4 lg:col-start-9 lg:pt-3">
+            <p className="enter max-w-[40ch] text-[15px] leading-[1.6] text-ink-70 [animation-delay:340ms] lg:text-ink-45 md:text-[16px] lg:col-span-4 lg:col-start-9 lg:pt-3">
               Construction contracting, labour hire and recruitment across Greater Sydney.
               Ticketed crews on a casual, contract or permanent basis, most requests filled
               within four hours.

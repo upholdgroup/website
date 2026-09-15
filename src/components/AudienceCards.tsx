@@ -10,8 +10,10 @@ import { Reveal } from "@/components/ui/Reveal";
  * mobile. Never make one audience read the other's page.
  */
 export function AudienceCards() {
+  // No top padding on a phone: the hero already ends with space above this,
+  // and dropping it puts the ink card on the first screen.
   return (
-    <Section tight>
+    <Section tight className="pt-0 md:pt-20">
       <Container>
         <div className="grid gap-4 md:grid-cols-2">
           <Reveal>
