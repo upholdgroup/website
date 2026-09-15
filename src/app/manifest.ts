@@ -33,6 +33,14 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/svg+xml",
       },
       {
+        /* 192px, a multiple of 48, which is what Google asks of a favicon it
+           will show beside a search result. Generated from icon.svg. */
+        src: "/icon1.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
         src: "/apple-icon.png",
         sizes: "180x180",
         type: "image/png",
