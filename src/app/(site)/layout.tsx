@@ -11,6 +11,9 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <>
       <SiteHeader />
+      {/* Watched by SiteHeader to know whether the page is at the top. See the
+          comment on the observer there for why this is not a scroll listener. */}
+      <div id="top-sentinel" aria-hidden="true" className="pointer-events-none absolute top-0 left-0 h-20 w-px" />
       <main id="main" data-frame>{children}</main>
       <SiteFooter />
       <MobileActionBar />

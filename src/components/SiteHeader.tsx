@@ -48,31 +48,53 @@ export function SiteHeader() {
     solid white once the page has moved. Everywhere else it is the plain sticky
     bar it has always been.
 
-    The scroll check is frame-throttled and only ever sets a boolean, and React
-    skips the render when the value has not changed, so scrolling costs one
-    comparison a frame. No backdrop-filter, which is what made an earlier
-    header shimmer on real hardware.
+    Whether the page is at the top is answered by watching a marker at the top
+    of the document, not by reading the scroll position.
+
+    Reading it meant taking a sample when the header mounted and then waiting
+    for scroll events. That is timing-dependent, and browsers move the page
+    without one: Safari restores a scroll position after load, the router
+    resets it on a client navigation, and the back/forward cache resumes a page
+    whole. Miss that moment and the header stays white with the page sitting at
+    the top, until a scroll tells it otherwise. An observer is told the answer
+    whenever it changes, whoever moved the page.
+
+    The marker is 80px tall, so an iPhone leaving the page a few pixels down as
+    its address bar collapses still counts as the top.
   */
   const overlay = pathname === "/";
   const [atTop, setAtTop] = useState(true);
 
   useEffect(() => {
     if (!overlay) return;
-    let frame = 0;
-    const check = () => {
-      frame = 0;
-      setAtTop(window.scrollY < 24);
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(check);
-    };
-    check();
-    window.addEventListener("scroll", onScroll, { passive: true });
+
+    const sentinel = document.getElementById("top-sentinel");
+
+    // No marker (a page that does not render one): fall back to the scroll
+    // position, which is better than a header stuck in one state.
+    if (!sentinel) {
+      const check = () => setAtTop(window.scrollY < 24);
+      check();
+      window.addEventListener("scroll", check, { passive: true });
+      return () => window.removeEventListener("scroll", check);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setAtTop(entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(sentinel);
+
+    // A page restored from the back/forward cache is not re-observed, so ask
+    // once more on resume.
+    const onShow = () => setAtTop(sentinel.getBoundingClientRect().bottom > 0);
+    window.addEventListener("pageshow", onShow);
+
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (frame) cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("pageshow", onShow);
     };
-  }, [overlay]);
+  }, [overlay, pathname]);
 
   const clear = overlay && atTop && !sheetOpen && !megaOpen;
   const pill = clear ? "bg-surface-1 shadow-[0_1px_3px_rgb(17_17_17/0.1)]" : "bg-surface-2";
